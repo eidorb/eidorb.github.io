@@ -17,6 +17,6 @@ Edit locally:
 
     uv run marimo edit notebook.py
 
-Edit on da web:
+Edit on da web: https://marimo.app/https://eidorb.github.io/notebook.py
 
-https://marimo.app/https://eidorb.github.io/notebook.py
+This file is an _actually_ static website: https://eidorb.github.io/notebook.html
