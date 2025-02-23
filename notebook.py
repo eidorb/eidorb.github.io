@@ -37,7 +37,7 @@ def _():
 
 
 @app.cell
-def _(avatar_url, login, mo, query_params, urlencode):
+def _(avatar_url, login, mo, query_params):
     from urllib.parse import urlencode
 
     mo.md(
@@ -77,7 +77,14 @@ def _(avatar_url, login, mo, query_params, urlencode):
 def _(login, mo, requests):
     import itertools
 
-    # get avatar or placeholder if user not found :(
+    # fall back to placeholder avatar and empty list of repos
+    # if user can't be found
+    user = None
+    avatar_url = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+    # no user has no repos
+    repos = []
+
+    # try to look up avatar and repos from user login
     try:
         with mo.status.spinner():
             response = requests.get(f"https://api.github.com/users/{login.value}")
@@ -86,33 +93,24 @@ def _(login, mo, requests):
             repos = requests.get(user["repos_url"]).json()
             avatar_url = user["avatar_url"]
     except requests.HTTPError:
-        user = None
-        avatar_url = (
-            "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-        )
+        # 404 user not found :(
+        pass
 
-    # filter my repos: not forks; have a homepage link
-    if user:
-        projects = [
-            repo
-            for repo in repos
-            if not repo["fork"] and repo["homepage"] and repo["name"] != "eidorb.github.io"
-        ]
-    # no user has no repos
-    else:
-        projects = []
-
-    # use differnt types of details to style with colour
-    for repo, type in zip(projects, itertools.cycle(["info", "warn", "danger", "success"])):
-        mo.output.append(
-            mo.md(
-                f"""
-                /// details | [{repo["name"]}]({repo["homepage"]})
-                    type: {type}
-
-                {repo["description"]} [::line-md:github-loop::]({repo["html_url"]}) 
-                ///
-                """
+    # style projects with cycling colours (details types)
+    types = itertools.cycle(["info", "warn", "danger", "success"])
+    for repo in repos:
+        # filter out forks and repos without homepages
+        if not repo["fork"] and repo["homepage"] and repo["name"] != "eidorb.github.io":
+            mo.output.append(
+                mo.md(
+                    f"""
+                    /// details | [{repo["name"]}]({repo["homepage"]})
+                        type: {next(types)}
+    
+                    {repo["description"]} [::line-md:github-loop::]({repo["html_url"]}) 
+                    ///
+                    """
+                )
             )
     return avatar_url, itertools, repo, repos, response, types, user
 
@@ -120,6 +118,30 @@ def _(login, mo, requests):
 @app.cell
 def _(mo):
     mo.md(r"""<small>Hack on your own copy of this notebook [here](https://marimo.app/https://eidorb.github.io/notebook.py).</small>""")
+    return
+
+
+@app.cell
+def _(mo):
+    # hmm perhaps lil switch, towards bottow of page, with lab icon (beaker thing)
+    switch = mo.ui.switch(label="do not disturb")
+
+    # actually, nah...
+    # it's a toggle button
+    # https://docs.marimo.io/recipes/?h=toggle#create-a-toggle-button
+
+    mo.hstack([switch, mo.md(f"Has value: {switch.value}")])
+    mo.ui.tabs(
+        {
+            " ": "bar",
+            "💻 LAB hehe!": mo.ui.text(placeholder="Key"),
+        }
+    )
+    return (switch,)
+
+
+@app.cell
+def _():
     return
 
 
