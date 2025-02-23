@@ -6,23 +6,23 @@ app = marimo.App(app_title="", css_file="")
 
 @app.cell
 def _():
+    """
+    Export to WASM-powered HTML:
+        uv run marimo export html-wasm notebook.py -o . --mode run
+
+    Serve locally:
+        uv run -m http.server --directory .
+    """
+
     from itertools import cycle
     from urllib.parse import urlencode
     import marimo as mo
-    return cycle, mo, urlencode
 
-
-@app.cell
-def _(mo):
     with mo.status.spinner("loading snakes on a browser..."):
         # import micropip
         # await micropip.install('requests')
         import requests
-    return (requests,)
 
-
-@app.cell
-def _(mo):
     # get and set login name from query param
     # if _no_ login param, then login is eidorb
     # otherwise login is set to login param
@@ -35,7 +35,7 @@ def _(mo):
         else query_params["login"],
         on_change=lambda value: query_params.set("login", value),
     )
-    return login, query_params
+    return cycle, login, mo, query_params, requests, urlencode
 
 
 @app.cell
