@@ -20,3 +20,14 @@ Edit locally:
 Edit on da web: https://marimo.app/https://eidorb.github.io/notebook.py
 
 This file is an _actually_ static website: https://eidorb.github.io/notebook.html
+
+## Other wacky things
+
+- datasette lite
+- pyscript
+- that funny pychilitk thing
+
+## Also wacky
+
+- cosmopolitan python datasette
+
