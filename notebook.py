@@ -14,8 +14,6 @@ def _():
         uv run -m http.server --directory .
     """
 
-    from itertools import cycle
-    from urllib.parse import urlencode
     import marimo as mo
 
     with mo.status.spinner("loading snakes on a browser..."):
@@ -35,11 +33,13 @@ def _():
         else query_params["login"],
         on_change=lambda value: query_params.set("login", value),
     )
-    return cycle, login, mo, query_params, requests, urlencode
+    return login, mo, query_params, requests
 
 
 @app.cell
 def _(avatar_url, login, mo, query_params, urlencode):
+    from urllib.parse import urlencode
+
     mo.md(
         f"""
         /// details | {
@@ -70,11 +70,13 @@ def _(avatar_url, login, mo, query_params, urlencode):
         ///
         """
     )
-    return
+    return (urlencode,)
 
 
 @app.cell
-def _(cycle, login, mo, requests):
+def _(login, mo, requests):
+    import itertools
+
     # get avatar or placeholder if user not found :(
     try:
         with mo.status.spinner():
@@ -101,7 +103,7 @@ def _(cycle, login, mo, requests):
         projects = []
 
     # use differnt types of details to style with colour
-    for repo, type in zip(projects, cycle(["info", "warn", "danger", "success"])):
+    for repo, type in zip(projects, itertools.cycle(["info", "warn", "danger", "success"])):
         mo.output.append(
             mo.md(
                 f"""
@@ -112,8 +114,7 @@ def _(cycle, login, mo, requests):
                 ///
                 """
             )
-        )
-    return avatar_url, projects, repo, repos, response, type, user
+    return avatar_url, itertools, repo, repos, response, types, user
 
 
 @app.cell
