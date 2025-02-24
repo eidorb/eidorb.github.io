@@ -46,14 +46,20 @@ the "something to do with git" would be
 
 that's the bland tech out of the way
 
+the options here are fully open
+reason deep about it
 
-design an amazing web game, based on the github rest api rate limit model!
+in-game resources and state are implemented in the rate limit status, hash based data structure and user client cookies (if required)
 
-is there another fun game here with a real life tie in? what if your api requests resource is money of some other financial asset. you use it to buy and trade things, or bet on events and outcomes. the cool real life tie in is that we use real life data sources to track how these actions went. a bet or a stock investment for instance. there must be some publicly verfiable way to link stock historical data or something to our actions. maybe our buy/sell timestamps must be kept in state to track - not sure. i think there are some very interesting options here
-trading, racing (speed limit), shipping, drug trading,
+so, design an incredible game based on the github rest api rate limit model!
+do consider games with a multiplayer, social, or real life tie-in element, as these are likely to be more enjoyable
 
-blockchain or git commit history
+generate three high-level summaries of game designs
 
+some interesting things to consider when designing gameplay mechanics are:
+player ip address changes with movement in real life
+player ip address can be quickly toggled on mobile by switching from wifi to cellular
+player ip address can changed with a friend's help, through use of hot spotting - fun! now the players are binded by ip address!
 
 here's github's rest api rate limit documentation:
 
