@@ -46,6 +46,9 @@ def _(mo):
         How close can you let it shrink.
 
         As the ... approaches _now_
+
+
+
         """
     )
     return
@@ -57,22 +60,26 @@ def _():
     from github import Github
 
     gh = Github()
-    get = mo.ui.run_button(kind="success", label="Get")
+    refresh = mo.ui.refresh(label="Refresh", options=["1s", "5s", "10s", "30s"])
+    consume = mo.ui.run_button(kind="danger", label="Consume")
+    resource_units = mo.ui.number(value=1)
 
     mo.md(
         f"""
-        {get} rate limit
+        {refresh} resource status
+
+        {consume} {resource_units} resource units
         """
     )
-    return Github, get, gh, mo
+    return Github, consume, gh, mo, refresh, resource_units
 
 
 @app.cell
-def _(get, gh, mo):
+def _(gh, mo, refresh):
     import json
     from datetime import datetime, timezone
 
-    if get.value:
+    if refresh.value:
         sent = datetime.now(tz=timezone.utc)
         rate_limit = gh.get_rate_limit()
         received = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -80,9 +87,9 @@ def _(get, gh, mo):
     mo.md(
         f"""
         request sent at
-    
+
         {sent}
-    
+
         rate limit status
 
         limit: {rate_limit.core.limit}
@@ -93,50 +100,83 @@ def _(get, gh, mo):
 
         reset: {str(rate_limit.core.reset.astimezone().replace(tzinfo=None))}
 
+        time until reset: {rate_limit.core.reset - received}
+
         response received at
-    
+
         {received}
+    
+        {type(rate_limit)}ack
+
+        {rate_limit.raw_headers}
+    
 
         """
-    ) if get.value else None
+    ) if refresh.value else None
     return datetime, json, rate_limit, received, sent, timezone
 
 
 @app.cell
-def _(rate_limit):
-    rate_limit.core.reset
-    return
-
-
-@app.cell
-def _(received):
-    received
-    return
-
-
-@app.cell
-def _(mo, rate_limit, received, sent):
+def _(mo, rate_limit, received):
     mo.md(
         f"""
-        delta: {received - sent}
-
-        mm:ss.mmmm: {rate_limit.core.reset - received}
-    
-        {(rate_limit.core.reset - received).seconds} s
+        time until reset: {rate_limit.core.reset - received}
         """
     )
     return
 
 
 @app.cell
+def _(rate_limit):
+    rate_limit.raw_headers
+    return
+
+
+@app.cell
 def _():
-    # poll rate limit endpoint?
+    _
+    return
+
+
+@app.cell
+def _(mo, rate_limit):
+    mo.ui.dictionary(rate_limit.raw_headers)
+    return
+
+
+@app.cell
+def _(mo, rate_limit):
+    mo.Html(rate_limit.raw_headers)
     return
 
 
 @app.cell
 def _(rate_limit):
-    rate_limit.raw_headers
+    [f'{k=},{type(v)=} vs {type("blah")=}' for k, v in rate_limit.raw_headers.items()]
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        """
+        ## another idea - treasure hunter!
+
+        mine for things in req ids:
+
+        `"x-github-request-id":"DCEE:1E06D0:F94125:14A6D74:67BCFEC0"`
+
+        it's a hex id
+
+        maybe you could search for...
+
+        letters, words numbers etc
+
+        use as seed to guess numbers, cards, suits, red/black
+
+        "DCE9:718E9:151D541:1BEE077:67BCFE8E"
+        """
+    )
     return
 
 
