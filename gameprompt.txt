@@ -3,63 +3,54 @@ world renowned for devising ingenious gameplay mechanics
 
 your games are simple to learn
 but the gameplay is mind-blowing!
-you take familiar culture, concepts and ideas and utterly obliterate them
-you make mind bending connections between common things that people had never ever thought of
-again and again, people are astounded as each new gameplay mechanic unfolds from such simple core game models!
-
 people love your games
 
-design a game
+strangely, the game engine is running and can be used for free, but no one is using it
+this is where you step in
 
-but be warned, this game may blow even your mind
-
+your task is to design games
+the games feature incredibly unique, innovative and compelling gameplay mechanics
 the game engine already exists
-in fact it is running already
-it's been running for years
-
-it's simple
+in fact it's been running for years
 it's incredibly reliable and battle-tested
-it's a globally distributed system which can run games for billions of simultaneous players
-and it's globally available to everyone, right now
-for free!
+it's globally distributed and support billions of simultaneous players
+it's free!
 
-the twist is that even though the game engine is running, no one has developed a game with it
-does that sound bonkers to you!?
+strangely, no one has been insane enough to build a game using it
 
-anyway the game engine is the github rest api
-and the core game model is the rest api rate limit
+the game engine is github's rest api
 
-now the other cool part is the game's database, which tracks our game's state through time
-it already also exists
-and no one is using it for a game also
+it has a resource model, api request rate limits
+it provides an authentication service
+there may be something really cool possible with git and its content-addressed immutable database
 
-there are some options - blockchain (bitcoin), or something to do with git
-the key here is that they use hash based datastructures
-content-addressed shit
-it's amazing
-the "something to do with git" would be
-- on github
-- something that changes enough over time to be interesting
-- perhaps the commit history of a popular repo with frequent commits
-- or some other mechanism, perhaps aggregating the commit history of some set of repos
-- it's not the content itself here that matters, just the (timestamp, commit hash) history, so time ordered mushing together is fine
+there are surely more i didn't think of
 
-that's the bland tech out of the way
+it provides global read-only time synchronised shared immutable state, through git commit histories
+    can this be used to implement future predictions and bets with resources (api requests)?
 
-the options here are fully open
-reason deep about it
-
-in-game resources and state are implemented in the rate limit status, hash based data structure and user client cookies (if required)
 
 so, design an incredible game based on the github rest api rate limit model!
 do consider games with a multiplayer, social, or real life tie-in element, as these are likely to be more enjoyable
 
-generate three high-level summaries of game designs
+generate three high-level summaries of game designs - single or multiplayer
 
 some interesting things to consider when designing gameplay mechanics are:
 player ip address changes with movement in real life
 player ip address can be quickly toggled on mobile by switching from wifi to cellular
-player ip address can changed with a friend's help, through use of hot spotting - fun! now the players are binded by ip address!
+player ip address can changed with another person's help (friend, foe or stranger), through use of hot spotting - fun! now the players are binded by ip address!
+most gameplay should happen with unauthenticated requests - they're always free and don't need a sign up - but authenticated requests could provide a fun element
+
+think of more! and think of twists
+
+some existing simple ideas to consider are:
+a cosmic space game where api requests are used to build stars and galaxies
+a trading game where players use api requests to buy resources, performance tracked by content addressed db
+a betting game where players use api requests to gamble!
+
+the game will obviously not be played with raw requests though
+a web api client will be developed that renders the game model and state my making the requests
+users just visit in their browser
 
 here's github's rest api rate limit documentation:
 
