@@ -80,7 +80,7 @@ def _(login, mo, requests):
     # fall back to placeholder avatar and empty list of repos
     # if user can't be found
     user = None
-    avatar_url = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+    avatar_url = f"https://github.com/identicons/denjoyner.png"  # found a "love"ly placeholder - https://github.com/kashav/identicon
     # no user has no repos
     repos = []
 
