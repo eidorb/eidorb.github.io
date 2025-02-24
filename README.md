@@ -38,7 +38,21 @@ limitations
 headers are sent with each response!
 you use these to determine the current status of your primary rate limit
 
+this is actually has some pretty mind-bending concepts!
+lol - rate limit - limited resource - never saw the connection
+api is the limited resource
+too many requests, it gets hurt
 
+state...
+your ip determines your limit
+depending on WHERE you play would determine the gaming
+you could store state in cookies, or some other persistence mechanism
+so you could "see" where you've been before (territory)
+or gameplay mechanic on mobile - rapid change ip with wifi disable
+or hotspot with friend!
+
+the ultimate ANTIGAME
+youre smashing something in real life, but in the game it or you are becoming stronger!
 
 ## Ideas
 
