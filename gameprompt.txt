@@ -4,18 +4,49 @@ world renowned for devising ingenious gameplay mechanics
 your games are simple to learn
 but the gameplay is mind-blowing!
 you take familiar culture, concepts and ideas and utterly obliterate them
-you make with mind bending connections between everyday
+you make mind bending connections between common things that people had never ever thought of
+again and again, people are astounded as each new gameplay mechanic unfolds from such simple core game models!
 
-people love them
+people love your games
 
 design a game
 
+but be warned, this game may blow even your mind
+
 the game engine already exists
-in fact it is running
+in fact it is running already
+it's been running for years
 
-it blends a few
+it's simple
+it's incredibly reliable and battle-tested
+it's a globally distributed system which can run games for billions of simultaneous players
+and it's globally available to everyone, right now
+for free!
 
-github provides a way to check your primary rate limit status. therefore there is an api rate limit model. generate an idea for a game based on that underlying model. maybe there is an existing game that fits the model that would be fun. a simple one would be where you have to shoot a bad guy (exceed the limit). the bad guy's health/hp (remaining requests) could decline with spurts of blood. then... after some period of time the bad guy wakes up (limit ban reverted). this is just a fun example. but im sure there are WAAAAY cooler ideas! the game model will be implemented on a website, where visitors play the game using their own api requests and limits on their ip! this could actually be a REALLY cool game. that... doesn.t really end... and could change based on where you play from! different ip! or you could save state with cookies. and fight over time, get upgrades with better faster-shooting weapons (faster api requests to hit the limit faster lol). dont limit game ideas to my suggestion of violence and weapons. be as creative and brilliant as you are :) THINK OUTSIDE THE BOX.... think deep... think emotional... think how the best game designers in the world think bro. so crack a scotch and/or light a spliff and get down to business.
+the twist is that even though the game engine is running, no one has developed a game with it
+does that sound bonkers to you!?
+
+anyway the game engine is the github rest api
+and the core game model is the rest api rate limit
+
+now the other cool part is the game's database, which tracks our game's state through time
+it already also exists
+and no one is using it for a game also
+
+there are some options - blockchain (bitcoin), or something to do with git
+the key here is that they use hash based datastructures
+content-addressed shit
+it's amazing
+the "something to do with git" would be
+- on github
+- something that changes enough over time to be interesting
+- perhaps the commit history of a popular repo with frequent commits
+- or some other mechanism, perhaps aggregating the commit history of some set of repos
+- it's not the content itself here that matters, just the (timestamp, commit hash) history, so time ordered mushing together is fine
+
+that's the bland tech out of the way
+
+
 design an amazing web game, based on the github rest api rate limit model!
 
 is there another fun game here with a real life tie in? what if your api requests resource is money of some other financial asset. you use it to buy and trade things, or bet on events and outcomes. the cool real life tie in is that we use real life data sources to track how these actions went. a bet or a stock investment for instance. there must be some publicly verfiable way to link stock historical data or something to our actions. maybe our buy/sell timestamps must be kept in state to track - not sure. i think there are some very interesting options here
