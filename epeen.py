@@ -11,48 +11,60 @@ app = marimo.App(width="medium")
 
 
 @app.cell
-def _(mo):
+def _():
+    import marimo as mo
+
+    stack = mo.ui.run_button(label="stack")
+    login = mo.ui.text(value="pertertodd", placeholder="GitHub login")
+
     mo.md(
         """
         # E-peen """  # cockchain 😂
-        r"""
+        rf"""
 
-        You mission is simple: 
-    
+        Our mission is simple.
+
         ## Build the largest blockchain on the internet.
 
-        We mine blocks from a secret AI cyberclock. 
+        We mine blocks from _大老二 (TikTok)_, a global AI cyberclock.
+
+        Mined blocks are distributed to warehouses at the precise rate of **one block per minute**.
+
+        Work on your task with strong determination:
+
+        - {stack} block from warehouse onto blockchain
+
+        /// admonition | Calling all masterpiece-making Monets! 
+
+        Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
     
-        We'll deliver new blocks to your warehouse at the rate of **one block per minute**.
-    
-        mined from an ancient AI cyber timechain cybermine
-        We 
-        we snip fresh blocks
-        we cut fresh blocks
+        {login}
 
-        the interweb blockchain
+        Unleash your inner artist, superstars!  
 
-        The objective is simple
-        laser focused goal
-        one objective
-        a single
+        \- _Your_ Employee Experience team (aka your biggest fans forever!) ✨
+        ///
 
-        deliver one block per minute
+        #### What are employees saying about our workplace?
 
-        Block Warehouse
+        > "🫡 stack block from warehouse onto blockchain"
 
-        We store blocks
-        (in warehouses).
+        \- Mia, CA
 
-        1. Get ya block out!
+        > "🫡 stack block from warehouse onto blockchain"
+
+        \- Ethan, TX
+
+        > "🫡 stack block from warehouse onto blockchain"
+
+        \- Olivia, NY
         """
     )
-    return
+    return login, mo, stack
 
 
 @app.cell
-def _():
-    import marimo as mo
+def _(mo):
     from github import Github
 
     gh = Github()
@@ -67,7 +79,7 @@ def _():
         {consume} {resource_units} resource units
         """
     )
-    return Github, consume, gh, mo, refresh, resource_units
+    return Github, consume, gh, refresh, resource_units
 
 
 @app.cell
@@ -113,64 +125,19 @@ def _(gh, mo, refresh):
 
 
 @app.cell
-def _(mo, rate_limit, received):
-    mo.md(
-        f"""
-        time until reset: {rate_limit.core.reset - received}
-        """
-    )
-    return
-
-
-@app.cell
-def _(rate_limit):
-    rate_limit.raw_headers
-    return
-
-
-@app.cell
-def _():
-    _
-    return
-
-
-@app.cell
-def _(mo, rate_limit):
-    mo.ui.dictionary(rate_limit.raw_headers)
-    return
-
-
-@app.cell
-def _(mo, rate_limit):
-    mo.Html(rate_limit.raw_headers)
-    return
-
-
-@app.cell
-def _(rate_limit):
-    [f'{k=},{type(v)=} vs {type("blah")=}' for k, v in rate_limit.raw_headers.items()]
-    return
-
-
-@app.cell
 def _(mo):
     mo.md(
         """
-        ## another idea - treasure hunter!
+        admonition ---
 
-        mine for things in req ids:
 
-        `"x-github-request-id":"DCEE:1E06D0:F94125:14A6D74:67BCFEC0"`
+        it has come to our attention
 
-        it's a hex id
+        blah blah bla
 
-        maybe you could search for...
 
-        letters, words numbers etc
 
-        use as seed to guess numbers, cards, suits, red/black
-
-        "DCE9:718E9:151D541:1BEE077:67BCFE8E"
+        No designs that’d make HR blush or send the office into a tizzy—think workplace wow, not NSFW oof!
         """
     )
     return
