@@ -18,7 +18,8 @@ def _():
     import requests
 
     stack = mo.ui.run_button(label="stack")
-    login = mo.ui.text(value="petertodd", placeholder="GitHub login")
+    # login = mo.ui.text(value="petertodd", placeholder="GitHub login")
+    login = mo.ui.text(value="thenashfactor", placeholder="GitHub login")
 
     clockblockchain = []
     return clockblockchain, login, mo, requests, stack
@@ -47,23 +48,6 @@ def _(login, mo):
     notices = [
         mo.md(
             rf"""
-            /// details | Calling all masterpiece-making Monets!
-                type: info
-
-            Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
-
-            {login}
-
-            We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
-
-            Unleash your inner artist, superstars!
-
-            \- _Your_ biggest fans! 😍 (aka Employee Experience)
-            ///
-            """
-        ),
-        mo.md(
-            rf"""
             /// details | Block theft at our warehouses
                 type: warning
 
@@ -78,6 +62,23 @@ def _(login, mo):
             Regards,
 
             \- Block Storage Operations
+            ///
+            """
+        ),
+        mo.md(
+            rf"""
+            /// details | Calling all masterpiece-making Monets!
+                type: info
+
+            Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
+
+            {login}
+
+            We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
+
+            Unleash your inner artist, superstars!
+
+            \- _Your_ biggest fans! 😍 (aka Employee Experience)
             ///
             """
         ),
