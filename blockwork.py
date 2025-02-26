@@ -107,49 +107,17 @@ def _(login, mo):
     ]
 
     mo.md(
-        r"""
+        f"""
         ## Noticeboard
+        
+        {mo.hstack(notices)}
         """
     )
     return (notices,)
 
 
 @app.cell
-def _(mo, notices):
-    mo.hstack(notices)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""## Operations""")
-    return
-
-
-@app.cell
-def _(mo, operations):
-    mo.hstack(operations)
-    return
-
-
-@app.cell
-def _(clockblockchain, login, mo, requests, stack):
-    rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
-
-    if stack.value:
-        requests.get(
-            f"https://api.github.com/users/{login.value}"
-        )  # remove block from warehouse/burn request
-        clockblockchain.append(login.value)
-
-
-    def grouper(iterable, n):
-        "Collect data into non-overlapping fixed-length chunks or blocks."
-        # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
-        iterators = [iter(iterable)] * n
-        return zip(*iterators)
-
-
+def _(clockblockchain, grouper, mo, rate_limit, stack):
     operations = [
         mo.md(
             f"""
@@ -171,6 +139,8 @@ def _(clockblockchain, login, mo, requests, stack):
                     '''
                 )
             }
+        
+            _BLOPS-101_
 
             <small>EmployeeHandbook - Copy (2)-external.docx</small>
             """
@@ -222,7 +192,44 @@ def _(clockblockchain, login, mo, requests, stack):
             """
         ).callout(),
     ]
-    return grouper, operations, rate_limit
+
+    mo.md(
+        f"""
+        ## Operations
+    
+        """
+    )
+    return (operations,)
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _(mo, operations):
+    mo.hstack(operations)
+    return
+
+
+@app.cell
+def _(clockblockchain, login, requests, stack):
+    rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
+
+    if stack.value:
+        requests.get(
+            f"https://api.github.com/users/{login.value}"
+        )  # remove block from warehouse/burn request
+        clockblockchain.append(login.value)
+
+
+    def grouper(iterable, n):
+        "Collect data into non-overlapping fixed-length chunks or blocks."
+        # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
+        iterators = [iter(iterable)] * n
+        return zip(*iterators)
+    return grouper, rate_limit
 
 
 @app.cell
