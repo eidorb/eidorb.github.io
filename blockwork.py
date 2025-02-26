@@ -7,7 +7,7 @@ Edit: uv run marimo edit epeen.py
 import marimo
 
 __generated_with = "0.11.8"
-app = marimo.App(width="full")
+app = marimo.App(width="full", app_title="Blockwork")
 
 
 @app.cell
@@ -170,22 +170,20 @@ def _(clockblockchain, login, mo, requests, stack):
         
             <small>(In warehouses.)</small>
 
-            /// details | Block storage
+            #### Block storage
         
-            Safe working limit: {rate_limit["limit"]} 🎁 
-
-            {
-                mo.ui.text_area(
-                    value="🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"]
-                )
-            }
+            /// attention | Maximum rated capacity
+        
+            {rate_limit["limit"]} 🎁 
             ///
+
+            {"🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"]}
             """
-        ).callout(kind="success"),
+        ).callout(),
         mo.md(
             f"""
 
-            ### ClockBlockchain
+            ### $CBC: ClockBlockChain
 
             {mo.tree(clockblockchain)}
 
