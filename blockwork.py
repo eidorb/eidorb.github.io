@@ -120,32 +120,6 @@ def _(login, mo):
 def _(clockblockchain, grouper, mo, rate_limit, stack):
     operations = [
         mo.md(
-            f"""
-            ### Employee handbook
-
-            Work on your task list with one-pointed strong determination:
-
-            - {stack} block from warehouse onto blockchain
-
-            #### Block stacking workflow
-
-            {
-                mo.mermaid(
-                    '''
-                    stateDiagram-v2
-                        s : stack block from warehouse onto blockchain
-                        [*] --> s
-                        s --> s
-                    '''
-                )
-            }
-        
-            _BLOPS-101_
-
-            <small>EmployeeHandbook - Copy (2)-external.docx</small>
-            """
-        ).callout(),
-        mo.md(
             rf"""
             ### ▨ Block warehouse
 
@@ -176,14 +150,47 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
         ).callout(),
         mo.md(
             f"""
+            ### Employee handbook
+
+            Work on your task list with one-pointed strong determination:
+
+            - {stack} block from warehouse onto blockchain
+
+            #### Block stacking workflow
+
+            {
+                mo.mermaid(
+                    '''
+                    stateDiagram-v2
+                        s : stack block from warehouse onto blockchain
+                        [*] --> s
+                        s --> s
+                    '''
+                )
+            }
+        
+            _BLOPS-101_
+
+            <small>EmployeeHandbook - Copy (2)-external.docx</small>
+            """
+        ).callout(),
+        mo.md(
+            f"""
             ### ClockBlockChain
 
-            Block height: {len(clockblockchain)}
-        
             {
                 mo.tree(
                     [
-                        mo.image(f"https://github.com/identicons/{login}.png", width="10em")
+                        mo.image(f"https://github.com/identicons/{login}.png", width="5em")
+                        for login in clockblockchain
+                    ]
+                )
+            }
+
+            {
+                mo.tree(
+                    [
+                        mo.image(f"https://github.com/identicons/{login}.png", width="5em")
                         for login in clockblockchain
                     ]
                 )
@@ -202,11 +209,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
 
 @app.cell
-def _():
-    return
-
-
-@app.cell
 def _(mo, operations):
     mo.hstack(operations)
     return
@@ -220,7 +222,7 @@ def _(clockblockchain, login, requests, stack):
         requests.get(
             f"https://api.github.com/users/{login.value}"
         )  # remove block from warehouse/burn request
-        clockblockchain.append(login.value)
+        clockblockchain.insert(0, login.value)
 
 
     def grouper(iterable, n):
