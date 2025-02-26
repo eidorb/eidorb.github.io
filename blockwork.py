@@ -47,7 +47,8 @@ def _(login, mo):
     notices = [
         mo.md(
             rf"""
-            /// admonition | Calling all masterpiece-making Monets! 
+            /// details | Calling all masterpiece-making Monets!
+                type: info
 
             Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
 
@@ -57,29 +58,22 @@ def _(login, mo):
 
             Unleash your inner artist, superstars!
 
-            \- _Your_ biggest fans! 😍 (aka Employee Experience) 
+            \- _Your_ biggest fans! 😍 (aka Employee Experience)
             ///
             """
         ),
         mo.md(
             rf"""
-            /// warning | Block theft at our warehouses
+            /// details | Block theft at our warehouses
+                type: warning
 
             Report instances of block theft **immediately** to your regional BSO Liason Officer.
 
-            Blockheads, longclocks and others prone to hyperstacking steal blocks in an attempt bypass fair block delivery rates.
-        
-            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques 
-            used by thieves to 
-            impersonate employees:
-        
-            - VPNs
-            - hotspotting
-            - "borrowing" Wi-Fi
+            Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
 
-            Remain vigilant. 
-            Be wary of colleagues, friends and family -- especially your children. 
-            Accurate information will be handsomely rewarded.
+            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
+
+            Remain vigilant. Be wary of colleagues, friends and family -- especially your children. Accurate information will be handsomely rewarded.
 
             Regards,
 
@@ -89,14 +83,16 @@ def _(login, mo):
         ),
         mo.md(
             rf"""
-            /// danger | Attention all!
+            /// details| Attention all!
+                type: danger
 
-            Employee Experience have been informed of a block design resembling genitalia of a sperm-producing man or woman.
+            Employee Experience have been notified of a block design resembling genitalia of a sperm-producing man or woman.
 
-            Block designs NOT suitable for work will NOT be tolerated.
+            Employee Experience is also aware of employees sharing "blockshots", competing in "biggest e-peen" events and other distateful activites on social media.
 
-            Employee Experience is also aware of your social media presence. 
-            Employees caught sharing "blockshots", competing in "biggest e-peen" events and other distateful activites will be forcefully entered into a PIMP arrangement (Performance Improvemet Management Plan).
+            Let’s keep it pro and polished, okay? No designs that’d make HR blush or send the office into a tizzy—think workplace "Wow, not NSFW oof! 🙅"
+
+            Remember Blockwork reserves the right to force you into a PIMP arrangement (Performance Improvement Management Plan) 🤔
 
             Have a great day.
 
@@ -109,8 +105,8 @@ def _(login, mo):
     mo.md(
         f"""
         ## Noticeboard
-        
-        {mo.hstack(notices)}
+
+        {mo.vstack(notices)}
         """
     )
     return (notices,)
@@ -131,8 +127,8 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
             #### Block storage
 
-            /// attention | Maximum rated capacity: {rate_limit["limit"]} ▧ 
-        
+            /// attention | Maximum rated capacity: {rate_limit["limit"]} ▧
+
             ///
 
             {
@@ -168,7 +164,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
                     '''
                 )
             }
-        
+
             _BLOPS-101_
 
             <small>EmployeeHandbook - Copy (2)-external.docx</small>
@@ -186,15 +182,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
                     ]
                 )
             }
-
-            {
-                mo.tree(
-                    [
-                        mo.image(f"https://github.com/identicons/{login}.png", width="5em")
-                        for login in clockblockchain
-                    ]
-                )
-            }
             """
         ).callout(),
     ]
@@ -202,7 +189,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
     mo.md(
         f"""
         ## Operations
-    
+
         """
     )
     return (operations,)
