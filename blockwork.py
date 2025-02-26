@@ -34,7 +34,7 @@ def _(clockblockchain, login, mo, requests, stack):
 
     mo.md(
         """
-        # E-peen """  # cockchain 😂
+        # Blockwork """  # cockchain 😂
         rf"""
 
         Our mission is simple.
@@ -58,6 +58,18 @@ def _(clockblockchain, login, mo, requests, stack):
         Unleash your inner artist, superstars!  
 
         \- _Your_ Employee Experience team (aka your biggest fans forever!) ✨
+        ///
+
+        
+        /// attention | Attention all!
+    
+        It has recently come to our attention that a block has been stacked with a design resembling the genitalia of a sperm-producing man or woman.
+    
+        Block designs that are NOT suitable for work will NOT be tolerated.
+
+        Have a great day.
+    
+        \- Employee Experience 😡
         ///
 
         ## Warehouse
@@ -97,20 +109,7 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md(
-        """
-        admonition ---
-
-
-        it has come to our attention
-
-        blah blah bla
-
-
-
-        No designs that’d make HR blush or send the office into a tizzy—think workplace wow, not NSFW oof!
-        """
-    )
+    mo.md(""" """)
     return
 
 
