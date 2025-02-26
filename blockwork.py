@@ -7,7 +7,7 @@ Edit: uv run marimo edit epeen.py
 import marimo
 
 __generated_with = "0.11.8"
-app = marimo.App(width="medium")
+app = marimo.App(width="full")
 
 
 @app.cell
@@ -136,13 +136,48 @@ def _(clockblockchain, login, mo, requests, stack):
     operations = [
         mo.md(
             f"""
-            ### Warehouse
+            ### Employee handbook
 
-            Capacity: {rate_limit["limit"]} 
+            Work on your task list with one-pointed strong determination:
 
-            Blocks: {rate_limit["remaining"]}
+            - stack block from warehouse onto blockchain
+
+            #### Block stacking workflow
+
+            {
+                mo.mermaid(
+                    '''
+                    stateDiagram-v2
+                        s : stack block from warehouse onto blockchain
+                        [*] --> s
+                        s --> s
+                    '''
+                )
+            }
+        
+            <small>EmployeeHandbook - Copy (2)-external.docx</small>
             """
-        ),
+        ).callout(),
+        mo.md(
+            f"""
+            \# TODO: think about refreshing this
+        
+            ### Block Warehouse
+        
+            > We store blocks!
+            >
+            > (In warehouses.)
+
+            #### Block storage
+
+            /// details | Block storage capacity rating
+        
+            Safe working limit: {rate_limit["limit"]} 🎁 
+            ///
+
+            {mo.ui.text_area(value="🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"])}
+            """
+        ).callout(kind="warn"),
         mo.md(
             f"""
 
@@ -154,30 +189,8 @@ def _(clockblockchain, login, mo, requests, stack):
             """
         ),
     ]
-    mo.vstack(
-        [
-        ]
-    )
+    mo.vstack([])
     return operations, rate_limit
-
-
-@app.cell
-def _():
-    return
-
-
-app._unparsable_cell(
-    r"""
-
-
-
-                # TODO: turn this into a corporate process document with bpmn flow diagram fucking lol and stupid .docx FINAL v8 -external
-                Work on your task with one-pointed strong determination:
-
-                - stack block from warehouse onto blockchain
-    """,
-    name="_"
-)
 
 
 @app.cell
