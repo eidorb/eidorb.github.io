@@ -44,7 +44,7 @@ def _(mo):
 def _(login, mo):
     notices = [
         mo.md(
-            f"""
+            rf"""
             /// admonition | Calling all masterpiece-making Monets! 
 
             Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
@@ -60,7 +60,7 @@ def _(login, mo):
             """
         ),
         mo.md(
-            f"""
+            rf"""
             /// warning | Block theft at our warehouses
 
             Please report any instances of block theft to your regional BSO Liason Officer.
@@ -80,7 +80,7 @@ def _(login, mo):
             """
         ),
         mo.md(
-            f"""
+            rf"""
             /// danger | Attention all!
 
             Employee Experience have been informed of a block design resembling genitalia of a sperm-producing man or woman.
@@ -135,6 +135,14 @@ def _(clockblockchain, login, mo, requests, stack):
         )  # remove block from warehouse/burn request
         clockblockchain.append(login.value)
 
+
+    def grouper(iterable, n):
+        "Collect data into non-overlapping fixed-length chunks or blocks."
+        # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
+        iterators = [iter(iterable)] * n
+        return zip(*iterators)
+
+
     operations = [
         mo.md(
             f"""
@@ -161,7 +169,7 @@ def _(clockblockchain, login, mo, requests, stack):
             """
         ).callout(),
         mo.md(
-            f"""
+            rf"""
             ### ▢ Block Warehouse
         
             \# TODO: think about refreshing this
@@ -174,10 +182,21 @@ def _(clockblockchain, login, mo, requests, stack):
         
             /// attention | Maximum rated capacity
         
-            {rate_limit["limit"]} 🎁 
+            {rate_limit["limit"]} ▧
             ///
 
-            {"🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"]}
+            ```
+            {
+                mo.ui.text_area(
+                    "".join(
+                        "".join(group)
+                        for group in grouper(
+                            "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
+                        )
+                    )
+                )
+            }
+            ```
             """
         ).callout(),
         mo.md(
@@ -192,7 +211,7 @@ def _(clockblockchain, login, mo, requests, stack):
         ).callout(),
     ]
     mo.vstack([])
-    return operations, rate_limit
+    return grouper, operations, rate_limit
 
 
 @app.cell
@@ -203,15 +222,15 @@ def _(mo):
 
         -   > "🫡 stack block from warehouse onto blockchain"
 
-            \- Mia, CA
+            \\- Mia, CA
 
             -   > "🫡 stack block from warehouse onto blockchain"
 
-                \- Ethan, TX
+                \\- Ethan, TX
 
                 -   > "🫡 stack block from warehouse onto blockchain"
 
-                    \- Olivia, NY
+                    \\- Olivia, NY
         """
     )
     return
