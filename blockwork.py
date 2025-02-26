@@ -183,7 +183,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             {
                 mo.tree(
                     [
-                        mo.image(f"https://github.com/identicons/{login}.png")
+                        mo.image(f"https://github.com/identicons/{login}.png", width="10em")
                         for login in clockblockchain
                     ]
                 )
