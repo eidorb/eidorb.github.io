@@ -2,6 +2,8 @@
 Run: uv run marimo run epeen.py
 
 Edit: uv run marimo edit epeen.py
+
+Export: uv run marimo export html-wasm blockwork.py -o blockwork.html
 """
 
 import marimo
@@ -16,7 +18,7 @@ def _():
     import requests
 
     stack = mo.ui.run_button(label="stack")
-    login = mo.ui.text(value="pertertodd", placeholder="GitHub login")
+    login = mo.ui.text(value="petertodd", placeholder="GitHub login")
 
     clockblockchain = []
     return clockblockchain, login, mo, requests, stack
@@ -74,7 +76,7 @@ def _(login, mo):
             Be wary of your friends and family.
 
             Regards,
-        
+
             \- Block Storage Operations
             ///
             """
@@ -88,7 +90,7 @@ def _(login, mo):
             Block designs NOT suitable for work will NOT be tolerated.
 
             Additonally, it has come to the attention of Employee Experience that employees are sharing their "blockshots", asking others to "get ya block out!", competing in "biggest e-peen" events and other distateful activites on social media.
-        
+
             Employee Experience is aware of your activities. You have been warned.
 
             Have a great day.
@@ -164,35 +166,33 @@ def _(clockblockchain, login, mo, requests, stack):
                     '''
                 )
             }
-        
+
             <small>EmployeeHandbook - Copy (2)-external.docx</small>
             """
         ).callout(),
         mo.md(
             rf"""
             ### ▢ Block Warehouse
-        
+
             \# TODO: think about refreshing this
-        
+
             > We store blocks!
-        
+
             <small>(In warehouses.)</small>
 
             #### Block storage
-        
+
             /// attention | Maximum rated capacity
-        
+
             {rate_limit["limit"]} ▧
             ///
 
             ```
             {
-                mo.ui.text_area(
-                    "".join(
-                        "".join(group)
-                        for group in grouper(
-                            "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
-                        )
+                "".join(
+                    "".join(group)
+                    for group in grouper(
+                        "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
                     )
                 )
             }
@@ -204,7 +204,14 @@ def _(clockblockchain, login, mo, requests, stack):
 
             ### $CBC: ClockBlockChain
 
-            {mo.tree(clockblockchain)}
+            {
+                mo.tree(
+                    [
+                        mo.image(f"https://github.com/identicons/{login}.png")
+                        for login in clockblockchain
+                    ]
+                )
+            }
 
             {stack} block from warehouse onto blockchain
             """
