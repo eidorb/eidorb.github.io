@@ -57,7 +57,7 @@ def _(login, mo):
 
             Unleash your inner artist, superstars!
 
-            \- _Your_ biggest fans! (aka Employee Experience) 
+            \- _Your_ biggest fans! 😍 (aka Employee Experience) 
             ///
             """
         ),
@@ -65,15 +65,21 @@ def _(login, mo):
             rf"""
             /// warning | Block theft at our warehouses
 
-            Please report any instances of block theft to your regional BSO Liason Officer.
+            Report instances of block theft **immediately** to your regional BSO Liason Officer.
 
-            We praise _大老二_, oh chronotastic one, for informing us of techniques used by thieves to steal blocks from employee warehouses:
-
+            Blockheads, longclocks and others prone to hyperstacking steal blocks in an attempt bypass fair block delivery rates.
+        
+            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques 
+            used by thieves to 
+            impersonate employees:
+        
             - VPNs
             - hotspotting
             - "borrowing" Wi-Fi
 
-            Be wary of your friends and family.
+            Remain vigilant. 
+            Be wary of colleagues, friends and family -- especially your children. 
+            Accurate information will be handsomely rewarded.
 
             Regards,
 
@@ -89,9 +95,8 @@ def _(login, mo):
 
             Block designs NOT suitable for work will NOT be tolerated.
 
-            Additonally, it has come to the attention of Employee Experience that employees are sharing their "blockshots", asking others to "get ya block out!", competing in "biggest e-peen" events and other distateful activites on social media.
-
-            Employee Experience is aware of your activities. You have been warned.
+            Employee Experience is also aware of your social media presence. 
+            Employees caught sharing "blockshots", competing in "biggest e-peen" events and other distateful activites will be forcefully entered into a PIMP arrangement (Performance Improvemet Management Plan).
 
             Have a great day.
 
@@ -172,38 +177,40 @@ def _(clockblockchain, login, mo, requests, stack):
         ).callout(),
         mo.md(
             rf"""
-            ### ▢ Block Warehouse
-
-            \# TODO: think about refreshing this
+            ### ▨ Block warehouse
 
             > We store blocks!
 
             <small>(In warehouses.)</small>
 
+            \# TODO: refresh periodically as well as after block stack
+
             #### Block storage
 
-            /// attention | Maximum rated capacity
-
-            {rate_limit["limit"]} ▧
+            /// attention | Maximum rated capacity: {rate_limit["limit"]} ▧ 
+        
             ///
 
-            ```
             {
-                "".join(
-                    "".join(group)
-                    for group in grouper(
-                        "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
+                mo.tree(
+                    list(
+                        "".join(group)
+                        for group in grouper(
+                            "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
+                        )
                     )
                 )
             }
-            ```
             """
         ).callout(),
         mo.md(
             f"""
+            ### ClockBlockChain
 
-            ### $CBC: ClockBlockChain
+            Block height: {len(clockblockchain)}
 
+            {stack} block from warehouse onto blockchain
+        
             {
                 mo.tree(
                     [
@@ -212,12 +219,9 @@ def _(clockblockchain, login, mo, requests, stack):
                     ]
                 )
             }
-
-            {stack} block from warehouse onto blockchain
             """
         ).callout(),
     ]
-    mo.vstack([])
     return grouper, operations, rate_limit
 
 
