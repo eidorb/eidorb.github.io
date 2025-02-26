@@ -18,8 +18,7 @@ def _():
     import requests
 
     stack = mo.ui.run_button(label="stack")
-    # login = mo.ui.text(value="petertodd", placeholder="GitHub login")
-    login = mo.ui.text(value="thenashfactor", placeholder="GitHub login")
+    login = mo.ui.text(value="petertodd", placeholder="GitHub login")
 
     clockblockchain = []
     return clockblockchain, login, mo, requests, stack
@@ -44,29 +43,31 @@ def _(mo):
 
 
 @app.cell
-def _(login, mo):
+def _(clockblockchain, login, mo, stack):
+    stack.value
+
     notices = [
         mo.md(
             rf"""
-            /// details | Block theft at our warehouses
-                type: warning
+            /// details | Welcome to the Blockwork family!
 
-            Report instances of block theft **immediately** to your regional BSO Liason Officer.
+            Greetings, blockstars! 📦✨🤘
 
-            Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
+            Employee Experience is OVER THE MOON 🌙 to kick off our journey together! Our vision? A workplace where every block stacked is a tiny hug from YOU to the universe. Expect fun perks, team spirit, and SO MUCH JOY 💫 coming your way!
 
-            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
+            Stay tuned for our first big idea — we’re just bursting with excitement!
 
-            Remain vigilant. Be wary of colleagues, friends and family -- especially your children. Accurate information will be handsomely rewarded.
-
-            Regards,
-
-            \- Block Storage Operations
+            \- _Your_ Employee Experience pals (we ❤️ you already!)
             ///
             """
-        ),
-        mo.md(
-            rf"""
+        )
+    ]
+
+
+    if len(clockblockchain) >= 10:
+        notices.append(
+            mo.md(
+                rf"""
             /// details | Calling all masterpiece-making Monets!
                 type: info
 
@@ -81,9 +82,12 @@ def _(login, mo):
             \- _Your_ biggest fans! 😍 (aka Employee Experience)
             ///
             """
-        ),
-        mo.md(
-            rf"""
+            )
+        )
+    if len(clockblockchain) > 20:
+        notices.append(
+            mo.md(
+                rf"""
             /// details| Attention all!
                 type: danger
 
@@ -93,15 +97,37 @@ def _(login, mo):
 
             Let’s keep it pro and polished, okay? No designs that’d make HR blush or send the office into a tizzy—think workplace "Wow, not NSFW oof! 🙅"
 
-            Remember Blockwork reserves the right to force you into a PIMP arrangement (Performance Improvement Management Plan) 🤔
+            Remember, your employment contract grants Blockwork the right to force you into a PIMP arrangement (Performance Improvement Management Plan) if your speech does not comply with Blockwork's standards 🙊
 
             Have a great day.
 
             \- Employee Experience 😡
             ///
             """
-        ),
-    ]
+            )
+        )
+    if len(clockblockchain) > 44:
+        notices.append(
+            mo.md(
+                rf"""
+            /// details | Block theft at our warehouses
+                type: warning
+
+            Report instances of block theft **immediately** to your regional BSO Liason Officer.
+
+            Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
+
+            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
+
+            Remain vigilant. Be wary of colleagues, friends and family — especially your children. Accurate information will be handsomely rewarded.
+
+            Regards,
+
+            \- Block Storage Operations
+            ///
+            """
+            )
+        )
 
     mo.md(
         f"""
@@ -190,7 +216,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
     mo.md(
         f"""
         ## Operations
-
         """
     )
     return (operations,)
@@ -210,7 +235,7 @@ def _(clockblockchain, login, requests, stack):
         requests.get(
             f"https://api.github.com/users/{login.value}"
         )  # remove block from warehouse/burn request
-        clockblockchain.insert(0, login.value)
+        clockblockchain.insert(0, "thenashfactor" if len(clockblockchain) < 10 else login.value)
 
 
     def grouper(iterable, n):
