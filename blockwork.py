@@ -30,11 +30,11 @@ def _(mo):
 
         Welcome to Blockwork. Our mission here is simple:
 
-        ## Build the largest blockchain on the internet.
+        ## Build the largest blockchain in cyberspace.
 
         We mine blocks from _大老二_ (_TikTok_), a global AI cyberclock.
 
-        Mined blocks are distributed to warehouses at the precise rate of **one block per minute**.
+        Mined blocks are distributed to warehouses at precisely **one** block **per minute**.
         """
     )
     return
@@ -51,9 +51,9 @@ def _(login, mo):
 
             {login}
 
-            Unleash your inner artist, superstars!
-
             We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
+
+            Unleash your inner artist, superstars!
 
             \- _Your_ biggest fans! (aka Employee Experience) 
             ///
@@ -65,11 +65,13 @@ def _(login, mo):
 
             Please report any instances of block theft to your regional BSO Liason Officer.
 
-            We praise _大老二_, oh chronotastic one, for informing us of techniques used to steal blocks from employee warehouses:
+            We praise _大老二_, oh chronotastic one, for informing us of techniques used by thieves to steal blocks from employee warehouses:
 
             - VPNs
             - hotspotting
-            - corporate Wi-Fi tethering
+            - "borrowing" Wi-Fi
+
+            Be wary of your friends and family.
 
             Regards,
         
@@ -160,24 +162,26 @@ def _(clockblockchain, login, mo, requests, stack):
         ).callout(),
         mo.md(
             f"""
+            ### ▢ Block Warehouse
+        
             \# TODO: think about refreshing this
         
-            ### Block Warehouse
-        
             > We store blocks!
-            >
-            > (In warehouses.)
+        
+            <small>(In warehouses.)</small>
 
-            #### Block storage
-
-            /// details | Block storage capacity rating
+            /// details | Block storage
         
             Safe working limit: {rate_limit["limit"]} 🎁 
-            ///
 
-            {mo.ui.text_area(value="🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"])}
+            {
+                mo.ui.text_area(
+                    value="🎁" * rate_limit["remaining"] + "▢ " * rate_limit["used"]
+                )
+            }
+            ///
             """
-        ).callout(kind="warn"),
+        ).callout(kind="success"),
         mo.md(
             f"""
 
@@ -187,7 +191,7 @@ def _(clockblockchain, login, mo, requests, stack):
 
             {stack} block from warehouse onto blockchain
             """
-        ),
+        ).callout(),
     ]
     mo.vstack([])
     return operations, rate_limit
@@ -199,19 +203,25 @@ def _(mo):
         """
         ## What are employees saying about our workplace?
 
-        > "🫡 stack block from warehouse onto blockchain"
+        -   > "🫡 stack block from warehouse onto blockchain"
 
-        \- Mia, CA
+            \- Mia, CA
 
-        > "🫡 stack block from warehouse onto blockchain"
+            -   > "🫡 stack block from warehouse onto blockchain"
 
-        \- Ethan, TX
+                \- Ethan, TX
 
-        > "🫡 stack block from warehouse onto blockchain"
+                -   > "🫡 stack block from warehouse onto blockchain"
 
-        \- Olivia, NY
+                    \- Olivia, NY
         """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md("""<small>Powered by [GIGES](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28), GitHub's internet game engine service.</small>""")
     return
 
 
