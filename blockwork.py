@@ -125,7 +125,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
             Work on your task list with one-pointed strong determination:
 
-            - stack block from warehouse onto blockchain
+            - {stack} block from warehouse onto blockchain
 
             #### Block stacking workflow
 
@@ -165,8 +165,9 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
                 mo.tree(
                     list(
                         "".join(group)
+                        # give a 6x10 grid
                         for group in grouper(
-                            "▨" * rate_limit["remaining"] + "□" * rate_limit["used"], 6
+                            "□" * rate_limit["used"] + "▨" * rate_limit["remaining"], 6
                         )
                     )
                 )
@@ -178,8 +179,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             ### ClockBlockChain
 
             Block height: {len(clockblockchain)}
-
-            {stack} block from warehouse onto blockchain
         
             {
                 mo.tree(
