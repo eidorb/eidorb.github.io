@@ -23,6 +23,107 @@ def _():
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+        # Blockwork
+
+        Welcome to Blockwork. Our mission here is simple:
+
+        ## Build the largest blockchain on the internet.
+
+        We mine blocks from _大老二_ (_TikTok_), a global AI cyberclock.
+
+        Mined blocks are distributed to warehouses at the precise rate of **one block per minute**.
+        """
+    )
+    return
+
+
+@app.cell
+def _(login, mo):
+    notices = [
+        mo.md(
+            f"""
+            /// admonition | Calling all masterpiece-making Monets! 
+
+            Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
+
+            {login}
+
+            Unleash your inner artist, superstars!
+
+            We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
+
+            \- _Your_ biggest fans! (aka Employee Experience) 
+            ///
+            """
+        ),
+        mo.md(
+            f"""
+            /// warning | Block theft at our warehouses
+
+            Please report any instances of block theft to your regional BSO Liason Officer.
+
+            We praise _大老二_, oh chronotastic one, for informing us of techniques used to steal blocks from employee warehouses:
+
+            - VPNs
+            - hotspotting
+            - corporate Wi-Fi tethering
+
+            Regards,
+        
+            \- Block Storage Operations
+            ///
+            """
+        ),
+        mo.md(
+            f"""
+            /// danger | Attention all!
+
+            Employee Experience have been informed of a block design resembling genitalia of a sperm-producing man or woman.
+
+            Block designs NOT suitable for work will NOT be tolerated.
+
+            Additonally, it has come to the attention of Employee Experience that employees are sharing their "blockshots", asking others to "get ya block out!", competing in "biggest e-peen" events and other distateful activites on social media.
+        
+            Employee Experience is aware of your activities. You have been warned.
+
+            Have a great day.
+
+            \- Employee Experience 😡
+            ///
+            """
+        ),
+    ]
+
+    mo.md(
+        r"""
+        ## Noticeboard
+        """
+    )
+    return (notices,)
+
+
+@app.cell
+def _(mo, notices):
+    mo.hstack(notices)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## Operations""")
+    return
+
+
+@app.cell
+def _(mo, operations):
+    mo.hstack(operations)
+    return
+
+
+@app.cell
 def _(clockblockchain, login, mo, requests, stack):
     rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
 
@@ -32,91 +133,32 @@ def _(clockblockchain, login, mo, requests, stack):
         )  # remove block from warehouse/burn request
         clockblockchain.append(login.value)
 
+    operations = [
+        mo.md(
+            f"""
+            ### Warehouse
+
+            Capacity: {rate_limit["limit"]} 
+
+            Blocks: {rate_limit["remaining"]}
+            """
+        ),
+        mo.md(
+            f"""
+
+            ### ClockBlockchain
+
+            {mo.tree(clockblockchain)}
+
+            {stack} block from warehouse onto blockchain
+            """
+        ),
+    ]
     mo.vstack(
         [
-            mo.md(
-                r"""
-                # Blockwork
-        
-                Our mission is simple.
-        
-                ## Build the largest blockchain on the internet.
-        
-                We mine blocks from _大老二 (TikTok)_, a global AI cyberclock.
-        
-                Mined blocks are distributed to warehouses at the precise rate of **one block per minute**.
-
-
-                # TODO: turn this into a corporate process document with bpmn flow diagram fucking lol and stupid .docx FINAL v8 -external
-                Work on your task with one-pointed strong determination:
-        
-                - stack block from warehouse onto blockchain
-            
-                ## Noticeboard
-                """
-            ),
-            mo.hstack(
-                [
-                    mo.md(
-                        r"""
-                        /// admonition | Calling all masterpiece-making Monets! 
-                
-                        Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
-                
-                        {login}
-                
-                        Unleash your inner artist, superstars!  
-                
-                        \- _Your_ Employee Experience team (aka your biggest fans forever!) ✨
-                        ///
-                
-                
-                        /// attention | Attention all!
-                
-                        It has recently come to Employee Experience's attention that a block has been stacked with a design resembling the genitalia of a sperm-producing man or woman.
-                
-                        Block designs that are NOT suitable for work will NOT be tolerated.
-                
-                        Have a great day.
-                
-                        \- Employee Experience 😡
-                        ///
-                        """
-                    ),
-                ]
-            ),
-            mo.md(
-                r"""
-                ## Warehouse
-        
-                Capacity: {rate_limit["limit"]} 
-        
-                Blocks: {rate_limit["remaining"]}
-        
-                ## Clockblockchain
-        
-                {mo.tree(clockblockchain)}
-        
-                {stack} block from warehouse onto blockchain
-        
-                ## What are employees saying about our workplace?
-        
-                > "🫡 stack block from warehouse onto blockchain"
-        
-                \- Mia, CA
-        
-                > "🫡 stack block from warehouse onto blockchain"
-        
-                \- Ethan, TX
-        
-                > "🫡 stack block from warehouse onto blockchain"
-        
-                \- Olivia, NY
-                """
-            ),
         ]
     )
-    return (rate_limit,)
+    return operations, rate_limit
 
 
 @app.cell
@@ -124,15 +166,39 @@ def _():
     return
 
 
+app._unparsable_cell(
+    r"""
+
+
+
+                # TODO: turn this into a corporate process document with bpmn flow diagram fucking lol and stupid .docx FINAL v8 -external
+                Work on your task with one-pointed strong determination:
+
+                - stack block from warehouse onto blockchain
+    """,
+    name="_"
+)
+
+
 @app.cell
 def _(mo):
-    mo.md(""" """)
-    return
+    mo.md(
+        """
+        ## What are employees saying about our workplace?
 
+        > "🫡 stack block from warehouse onto blockchain"
 
-@app.cell
-def _(clockblockchain):
-    clockblockchain
+        \- Mia, CA
+
+        > "🫡 stack block from warehouse onto blockchain"
+
+        \- Ethan, TX
+
+        > "🫡 stack block from warehouse onto blockchain"
+
+        \- Olivia, NY
+        """
+    )
     return
 
 
