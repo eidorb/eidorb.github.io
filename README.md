@@ -54,6 +54,13 @@ or hotspot with friend!
 the ultimate ANTIGAME
 youre smashing something in real life, but in the game it or you are becoming stronger!
 
+star miner
+
+trawl repositories for stars in a deterministic order
+using your requests as fuel
+
+some kinda control system game where you adjust request rate according to some process value
+
 ## Ideas
 
 - a marimo notebook rate limit game
