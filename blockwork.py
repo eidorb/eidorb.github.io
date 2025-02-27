@@ -22,6 +22,7 @@ def _():
 
     clockblockchain = []
 
+
     def grouper(iterable, n):
         "Collect data into non-overlapping fixed-length chunks or blocks."
         # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
@@ -50,9 +51,9 @@ def _(mo):
 
 @app.cell
 def _(clockblockchain, login, mo, requests, stack):
-    refresh = mo.ui.refresh( default_interval=1)
+    refresh = mo.ui.refresh(default_interval=1)
     refresh
-    rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
+    rate_limit = requests.get("https://api.github.com/rate_limit").json()["rate"]
     show_login_notice_threshold = 7
 
     if stack.value:
@@ -61,7 +62,8 @@ def _(clockblockchain, login, mo, requests, stack):
                 f"https://api.github.com/users/{login.value}"
             ).raise_for_status()  # remove block from warehouse/burn request
             clockblockchain.insert(
-                0, login.value if len(clockblockchain) > show_login_notice_threshold else "thenashfactor"
+                0,
+                login.value if len(clockblockchain) > show_login_notice_threshold else "thenashfactor",
             )
         except requests.HTTPError:
             pass
