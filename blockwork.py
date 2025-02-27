@@ -196,17 +196,15 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             rf"""
             ### ▨ Block warehouse
 
-            > We store blocks!
-
-            <small>(In warehouses.)</small>
-
-            \# TODO: refresh periodically as well as after block stack
+            > We store blocks! <small>(In warehouses.)</small>
 
             #### Block storage
 
             /// attention | Maximum rated capacity: {rate_limit["limit"]} ▧
 
             ///
+
+            \# TODO: refresh periodically as well as after block stack
 
             {
                 mo.tree(
