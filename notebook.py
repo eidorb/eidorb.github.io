@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.11.8"
-app = marimo.App(app_title="", css_file="")
+app = marimo.App(width="full", app_title="", css_file="")
 
 
 @app.cell
@@ -82,7 +82,6 @@ def _(login, mo, requests):
     user = None
     # brute search look for interesting identicons... - https://github.com/kashav/identicon
     avatar_url = "https://github.com/identicons/jsime.png"
-    # no user has no repos
     repos = []
 
     # try to look up avatar and repos from user login
@@ -94,7 +93,9 @@ def _(login, mo, requests):
             repos = requests.get(user["repos_url"]).json()
             avatar_url = f"https://github.com/identicons/{login.value}.png"
     except requests.HTTPError:
-        # 404 user not found :(
+        # api error :( fall back to defaults above
+        # 404 user not found
+        # 403 rate limited
         pass
 
     # style projects with cycling colours (details types)
