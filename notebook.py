@@ -118,6 +118,18 @@ def _(login, mo, requests):
 
 @app.cell
 def _(mo):
+    mo.md(
+        r"""
+        ## Games
+
+        - [Blockwork](https://eidorb.github.io/blockwork.html)
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""<small>Hack on your own copy of this notebook [here](https://marimo.app/https://eidorb.github.io/notebook.py).</small>""")
     return
 
