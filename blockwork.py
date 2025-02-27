@@ -21,7 +21,13 @@ def _():
     login = mo.ui.text(value="petertodd", placeholder="GitHub login")
 
     clockblockchain = []
-    return clockblockchain, login, mo, requests, stack
+
+    def grouper(iterable, n):
+        "Collect data into non-overlapping fixed-length chunks or blocks."
+        # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
+        iterators = [iter(iterable)] * n
+        return zip(*iterators)
+    return clockblockchain, grouper, login, mo, requests, stack
 
 
 @app.cell
@@ -34,16 +40,43 @@ def _(mo):
 
         ## Build the largest blockchain in cyberspace.
 
-        We mine blocks from _大老二_ (_TikTok_), a global AI cyberclock.
+        We mine a global AI cyberclock named _大老二_ (translation: _TikTok_) for blocks.
 
-        Mined blocks are distributed to warehouses at precisely **one** block **per minute**.
+        Our employees _really_ enjoy stacking mined blocks. You do too. And if you don't, you will.
         """
     )
     return
 
 
 @app.cell
-def _(clockblockchain, login, mo, stack):
+def _(clockblockchain, login, mo, requests, stack):
+    refresh = mo.ui.refresh( default_interval=1)
+    refresh
+    rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
+    show_login_notice_threshold = 7
+
+    if stack.value:
+        try:
+            requests.get(
+                f"https://api.github.com/users/{login.value}"
+            ).raise_for_status()  # remove block from warehouse/burn request
+            clockblockchain.insert(
+                0, login.value if len(clockblockchain) > show_login_notice_threshold else "thenashfactor"
+            )
+        except requests.HTTPError:
+            pass
+    return rate_limit, refresh, show_login_notice_threshold
+
+
+@app.cell
+def _(
+    clockblockchain,
+    login,
+    mo,
+    rate_limit,
+    show_login_notice_threshold,
+    stack,
+):
     stack.value
 
     notices = [
@@ -63,8 +96,7 @@ def _(clockblockchain, login, mo, stack):
         )
     ]
 
-
-    if len(clockblockchain) >= 10:
+    if len(clockblockchain) > show_login_notice_threshold:
         notices.append(
             mo.md(
                 rf"""
@@ -84,7 +116,7 @@ def _(clockblockchain, login, mo, stack):
             """
             )
         )
-    if len(clockblockchain) > 20:
+    if len(clockblockchain) > show_login_notice_threshold * 2:
         notices.append(
             mo.md(
                 rf"""
@@ -106,7 +138,7 @@ def _(clockblockchain, login, mo, stack):
             """
             )
         )
-    if len(clockblockchain) > 44:
+    if rate_limit["remaining"] < 5 or len(clockblockchain) > 44:
         notices.append(
             mo.md(
                 rf"""
@@ -175,6 +207,12 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             f"""
             ### Employee handbook
 
+            Mined blocks are distributed to warehouses at precisely **one** block **per minute**. 
+
+            To manage risk to our employee's health, 
+            we halt deliveries if you have stacked more than {rate_limit["limit"]} in the past hour.
+            **Do not** attempt to exceed this limit
+
             Work on your task list with one-pointed strong determination:
 
             - {stack} block from warehouse onto blockchain
@@ -225,25 +263,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 def _(mo, operations):
     mo.hstack(operations)
     return
-
-
-@app.cell
-def _(clockblockchain, login, requests, stack):
-    rate_limit = requests.get("http://api.github.com/rate_limit").json()["rate"]
-
-    if stack.value:
-        requests.get(
-            f"https://api.github.com/users/{login.value}"
-        )  # remove block from warehouse/burn request
-        clockblockchain.insert(0, "thenashfactor" if len(clockblockchain) < 10 else login.value)
-
-
-    def grouper(iterable, n):
-        "Collect data into non-overlapping fixed-length chunks or blocks."
-        # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
-        iterators = [iter(iterable)] * n
-        return zip(*iterators)
-    return grouper, rate_limit
 
 
 @app.cell
