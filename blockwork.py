@@ -41,7 +41,7 @@ def _(mo):
 
         ## Build the largest blockchain in cyberspace.
 
-        We mine a global AI cyberclock named _大老二_ (translation: _TikTok_) for blocks.
+        We mine a globally synchronised cyberclock named _大老二_ (translation: _TikTok_) for AI clock blocks.
 
         Our employees _really_ enjoy stacking mined blocks. You do too. And if you don't, you will.
         """
@@ -133,7 +133,7 @@ def _(
             /// details| Attention all!
                 type: danger
 
-            Employee Experience have been notified block designs resembling genitalia of a sperm-producing man or woman.
+            Employee Experience have been informed of block designs resembling genitalia of a sperm-producing man or woman.
 
             Employee Experience is also aware of employees sharing "blockshots", competing in "biggest e-peen" events and other distateful activites on social media.
 
@@ -159,7 +159,7 @@ def _(
 
             Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
 
-            We have received wisdom from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
+            We have received tokens from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
 
             Remain vigilant. Be wary of colleagues, friends and family — especially your children. Accurate information will be handsomely rewarded.
 
@@ -183,10 +183,25 @@ def _(
 
 @app.cell
 def _(clockblockchain, grouper, mo, rate_limit, stack):
+    # received = datetime.utcnow().replace(tzinfo=timezone.utc)
+
     operations = [
         mo.md(
             f"""
-            ### ClockBlockChain
+            ### Clock block chain
+
+            {
+                mo.md(
+                    f'''
+                    /// danger | Safe working limit exceeded
+                
+                    You must rest {rate_limit["reset"]} seconds until you can stack safely again.
+                    ///
+                    '''
+                )
+                if rate_limit["remaining"] == 0
+                else ""
+            }
 
             {stack} block from warehouse onto blockchain.
 
@@ -208,12 +223,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
             #### Block storage
 
-            /// attention | Maximum rated capacity: {rate_limit["limit"]} ▧
-
-            ///
-
-            \# TODO: refresh periodically as well as after block stack
-
             {
                 mo.tree(
                     list(
@@ -225,17 +234,23 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
                     )
                 )
             }
+        
+            Capacity: {rate_limit["limit"]} ▧
+
+            \# TODO: refresh periodically as well as after block stack
             """
         ).callout(),
         mo.md(
             f"""
             ### Employee handbook
 
-            Mined blocks are distributed to warehouses at precisely **one** block **per minute**. 
+            Mined blocks are distributed to warehouses at precisely **1** block **per minute**. 
 
-            To manage risk to our employee's health, 
-            we halt deliveries if you have stacked more than {rate_limit["limit"]} in the past hour.
-            **Do not** attempt to exceed this limit
+            We halt deliveries if you have stacked more than 
+            **{rate_limit["limit"]}** blocks in the **past hour**.
+        
+            _大老二_ has prescribed limits in alignment with our safety. 
+            Do not attempt to bypass safe working limits.
 
             Work on your task list with one-pointed strong determination:
 
@@ -256,7 +271,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
             _BLOPS-101_
 
-            <small>EmployeeHandbook - Copy (2)-external.docx</small>
+            {mo.md("<small>EmployeeHandbook - Copy (2)-external.docx</small>").right()}
             """
         ).callout(),
     ]
