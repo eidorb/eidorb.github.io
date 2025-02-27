@@ -81,7 +81,7 @@ def _(login, mo, requests):
     # if user can't be found
     user = None
     # brute search look for interesting identicons... - https://github.com/kashav/identicon
-    avatar_url = "https://github.com/identicons/msqui.png"
+    avatar_url = "https://github.com/identicons/jsime.png"
     # no user has no repos
     repos = []
 
@@ -107,7 +107,7 @@ def _(login, mo, requests):
                     f"""
                     /// details | [{repo["name"]}]({repo["homepage"]})
                         type: {next(types)}
-    
+
                     {repo["description"]} [::line-md:github-loop::]({repo["html_url"]}) 
                     ///
                     """
