@@ -92,7 +92,7 @@ def _(login, mo, requests):
             response.raise_for_status()
             user = response.json()
             repos = requests.get(user["repos_url"]).json()
-            avatar_url = user["avatar_url"]
+            avatar_url = f"https://github.com/identicons/{login.value}.png"
     except requests.HTTPError:
         # 404 user not found :(
         pass
@@ -139,11 +139,6 @@ def _(mo):
         }
     )
     return (switch,)
-
-
-@app.cell
-def _():
-    return
 
 
 if __name__ == "__main__":
