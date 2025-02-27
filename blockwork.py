@@ -14,11 +14,14 @@ app = marimo.App(width="full", app_title="Blockwork")
 
 @app.cell
 def _():
+    import time
+
     import marimo as mo
     import requests
 
     stack = mo.ui.run_button(kind="danger", label="Stack")
     login = mo.ui.text(value="petertodd", placeholder="GitHub login")
+    refresh = mo.ui.refresh(options=[1, 20], default_interval=20)
 
     clockblockchain = []
 
@@ -28,7 +31,7 @@ def _():
         # grouper('ABCDEFG', 3, fillvalue='x') → ABC DEF Gxx
         iterators = [iter(iterable)] * n
         return zip(*iterators)
-    return clockblockchain, grouper, login, mo, requests, stack
+    return clockblockchain, grouper, login, mo, refresh, requests, stack, time
 
 
 @app.cell
@@ -50,9 +53,7 @@ def _(mo):
 
 
 @app.cell
-def _(clockblockchain, login, mo, requests, stack):
-    refresh = mo.ui.refresh(default_interval=1)
-    refresh
+def _(clockblockchain, login, requests, stack):
     rate_limit = requests.get("https://api.github.com/rate_limit").json()["rate"]
     show_login_notice_threshold = 7
 
@@ -75,7 +76,7 @@ def _(clockblockchain, login, mo, requests, stack):
             # if we're here, there was an api error :(
             # don't add a block
             pass
-    return rate_limit, refresh, response, show_login_notice_threshold
+    return rate_limit, response, show_login_notice_threshold
 
 
 @app.cell
@@ -182,9 +183,7 @@ def _(
 
 
 @app.cell
-def _(clockblockchain, grouper, mo, rate_limit, stack):
-    # received = datetime.utcnow().replace(tzinfo=timezone.utc)
-
+def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
     operations = [
         mo.md(
             f"""
@@ -195,7 +194,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
                     f'''
                     /// danger | Safe working limit exceeded
                 
-                    You must rest {rate_limit["reset"]} seconds until you can stack safely again.
+                    You must rest {rate_limit["reset"] - int(time.time())} seconds until you can stack safely again.
                     ///
                     '''
                 )
@@ -236,8 +235,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             }
         
             Capacity: {rate_limit["limit"]} ▧
-
-            \# TODO: refresh periodically as well as after block stack
             """
         ).callout(),
         mo.md(
@@ -279,6 +276,8 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
     mo.md(
         f"""
         ## Operations
+    
+        {refresh}
         """
     )
     return (operations,)
