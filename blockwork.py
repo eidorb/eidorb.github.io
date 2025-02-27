@@ -17,7 +17,7 @@ def _():
     import marimo as mo
     import requests
 
-    stack = mo.ui.run_button(label="stack")
+    stack = mo.ui.run_button(kind="danger", label="Stack")
     login = mo.ui.text(value="petertodd", placeholder="GitHub login")
 
     clockblockchain = []
@@ -177,6 +177,22 @@ def _(
 def _(clockblockchain, grouper, mo, rate_limit, stack):
     operations = [
         mo.md(
+            f"""
+            ### ClockBlockChain
+
+            {stack} block from warehouse onto blockchain.
+        
+            {
+                mo.tree(
+                    [
+                        mo.image(f"https://github.com/identicons/{login}.png", width="5em")
+                        for login in clockblockchain
+                    ]
+                )
+            }
+            """
+        ).callout(),
+        mo.md(
             rf"""
             ### ▨ Block warehouse
 
@@ -217,7 +233,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
             Work on your task list with one-pointed strong determination:
 
-            - {stack} block from warehouse onto blockchain
+            - stack block from warehouse onto blockchain
 
             #### Block stacking workflow
 
@@ -237,20 +253,6 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             <small>EmployeeHandbook - Copy (2)-external.docx</small>
             """
         ).callout(),
-        mo.md(
-            f"""
-            ### ClockBlockChain
-
-            {
-                mo.tree(
-                    [
-                        mo.image(f"https://github.com/identicons/{login}.png", width="5em")
-                        for login in clockblockchain
-                    ]
-                )
-            }
-            """
-        ).callout(),
     ]
 
     mo.md(
@@ -263,7 +265,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
 
 @app.cell
 def _(mo, operations):
-    mo.hstack(operations)
+    mo.hstack([operations[0], mo.vstack([operations[1], operations[2]])])
     return
 
 
