@@ -57,17 +57,25 @@ def _(clockblockchain, login, mo, requests, stack):
     show_login_notice_threshold = 7
 
     if stack.value:
+        # only add blocks if not limited by api
         try:
-            requests.get(
-                f"https://api.github.com/users/{login.value}"
-            ).raise_for_status()  # remove block from warehouse/burn request
-            clockblockchain.insert(
-                0,
-                login.value if len(clockblockchain) > show_login_notice_threshold else "thenashfactor",
-            )
-        except requests.HTTPError:
+            # attempt to burn an api request
+            response = requests.get(f"https://api.github.com/users/{login.value}")
+            if response.status_code == 404 or response.raise_for_status() is None:
+                # if we're here, we are not rate limited by api
+                # login may be an invalid user, but we are happy for a broken question mark to appear
+                clockblockchain.insert(
+                    0,
+                    login.value
+                    # set login to user with box avatar for first few blocks
+                    if len(clockblockchain) > show_login_notice_threshold
+                    else "thenashfactor",
+                )
+        except requests.HTTPError as e:
+            # if we're here, there was an api error :(
+            # don't add a block
             pass
-    return rate_limit, refresh, show_login_notice_threshold
+    return rate_limit, refresh, response, show_login_notice_threshold
 
 
 @app.cell
@@ -125,7 +133,7 @@ def _(
             /// details| Attention all!
                 type: danger
 
-            Employee Experience have been notified of a block design resembling genitalia of a sperm-producing man or woman.
+            Employee Experience have been notified block designs resembling genitalia of a sperm-producing man or woman.
 
             Employee Experience is also aware of employees sharing "blockshots", competing in "biggest e-peen" events and other distateful activites on social media.
 
@@ -181,7 +189,7 @@ def _(clockblockchain, grouper, mo, rate_limit, stack):
             ### ClockBlockChain
 
             {stack} block from warehouse onto blockchain.
-        
+
             {
                 mo.tree(
                     [
