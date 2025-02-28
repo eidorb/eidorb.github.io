@@ -80,7 +80,7 @@ def _(login, mo, requests):
     # fall back to placeholder avatar and empty list of repos
     # if user can't be found
     user = None
-    # brute search look for interesting identicons... - https://github.com/kashav/identicon
+    # brute search for interesting identicons... - https://github.com/kashav/identicon
     avatar_url = "https://github.com/identicons/jsime.png"
     repos = []
 
@@ -123,6 +123,35 @@ def _(mo):
     mo.md(
         r"""
         ## Games
+
+        >  The game is out there, and it's either play or get played.
+        >
+        > -- Omar Little
+
+        These games are played by billions of simultaneous players.
+        Not all players realise they are playing.
+
+        _You right mate?_
+
+        It's odd for sure, but kinda cool! 
+
+        In-game resources 
+
+        Game state is modelled with the API rate limit model. 
+
+        umanage sing GitHub. 
+        in-game player actions correspond
+        player actions correspond to API requests,
+        in-game resource is modelled with
+
+        >  A man got to have a code.
+        >
+        > -- Omar Little
+
+
+        So, if the game is using the API request rate limit model to manage gameplay, that might mean that the game's mechanics are designed such that  and the rate at which these requests can be made affects how the player can interact with the game.
+
+        Game ideas are limited by imagination.
 
         - [Blockwork](https://eidorb.github.io/blockwork.html)
         """
