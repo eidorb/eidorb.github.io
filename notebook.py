@@ -91,7 +91,8 @@ def _(login, mo, requests):
             response.raise_for_status()
             user = response.json()
             repos = requests.get(user["repos_url"]).json()
-            avatar_url = f"https://github.com/identicons/{login.value}.png"
+            # avatar_url = f"https://github.com/identicons/{login.value}.png"
+            avatar_url = user["avatar_url"]
     except requests.HTTPError:
         # api error :( fall back to defaults above
         # 404 user not found
