@@ -21,7 +21,7 @@ def _():
 
     stack = mo.ui.run_button(kind="danger", label="Stack")
     login = mo.ui.text(value="petertodd", placeholder="GitHub login")
-    refresh = mo.ui.refresh(options=[1, 20], default_interval=20)
+    refresh = mo.ui.refresh(options=["1s", "5s", "20s"], default_interval="20s")
 
     clockblockchain = []
 
@@ -50,6 +50,15 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell
+def _(refresh, requests, stack):
+    # run if refreshed, or stack button hit
+    refresh
+    stack.value
+    rate_limit = requests.get("https://api.github.com/rate_limit").json()["rate"]
+    return (rate_limit,)
 
 
 @app.cell
@@ -93,7 +102,6 @@ def _(mo, rate_limit):
 
 @app.cell
 def _(clockblockchain, login, requests, stack):
-    rate_limit = requests.get("https://api.github.com/rate_limit").json()["rate"]
     show_login_notice_threshold = 7
 
     if stack.value:
@@ -115,7 +123,9 @@ def _(clockblockchain, login, requests, stack):
             # if we're here, there was an api error :(
             # don't add a block
             pass
-    return rate_limit, response, show_login_notice_threshold
+
+    # mo.tree(rate_limit)
+    return response, show_login_notice_threshold
 
 
 @app.cell
@@ -150,64 +160,64 @@ def _(
         notices.append(
             mo.md(
                 rf"""
-            /// details | Calling all masterpiece-making Monets!
-                type: info
+                /// details | Calling all masterpiece-making Monets!
+                    type: info
 
-            Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
+                Starting today, our valued employees can customise blocks with a design that’s as unique as your login:
 
-            {login}
+                {login}
 
-            We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
+                We trust this will spark joy ✨ in your block stacking and satisfy concerns raised in the employee satisfication survey post-survey debrief discussion workshop series (shout out to ESSPSDDWS tiger team (T-Team) 👏).
 
-            Unleash your inner artist, superstars!
+                Unleash your inner artist, superstars!
 
-            \- _Your_ biggest fans! 😍 (aka Employee Experience)
-            ///
-            """
+                \- _Your_ biggest fans! 😍 (aka Employee Experience)
+                ///
+                """
             )
         )
     if len(clockblockchain) > show_login_notice_threshold * 2:
         notices.append(
             mo.md(
                 rf"""
-            /// details| Attention all!
-                type: danger
+                /// details| Attention all!
+                    type: danger
 
-            Employee Experience have been informed of block designs resembling genitalia of a sperm-producing man or woman.
+                Employee Experience have been informed of block designs resembling genitalia of a sperm-producing man or woman.
 
-            Employee Experience is also aware of employees sharing "blockshots", competing in "biggest e-peen" events and other distateful activites on social media.
+                Employee Experience is also aware of employees sharing "blockshots", entering in "biggest e-peen" competitions, bragging about their "c*ckchain" and other distateful activites on social media.
 
-            Let’s keep it pro and polished, okay? No designs that’d make HR blush or send the office into a tizzy—think workplace "Wow, not NSFW oof! 🙅"
+                Let’s keep it pro and polished, okay? No designs that’d make HR blush or send the office into a tizzy—think workplace "Wow, not NSFW oof! 🙅"
 
-            Remember, your employment contract grants Blockwork the right to force you into a PIMP arrangement (Performance Improvement Management Plan) if your speech does not comply with Blockwork's standards 🙊
+                Remember, your employment contract grants Blockwork the right to force you into a PIMP arrangement (Performance Improvement Management Plan) if your speech does not comply with Blockwork's standards 🙊
 
-            Have a great day.
+                Have a great day.
 
-            \- Employee Experience 😡
-            ///
-            """
+                \- Employee Experience 😡
+                ///
+                """
             )
         )
     if rate_limit["remaining"] < 5 or len(clockblockchain) > 44:
         notices.append(
             mo.md(
                 rf"""
-            /// details | Block theft at our warehouses
-                type: warning
+                /// details | Block theft at our warehouses
+                    type: warning
 
-            Report instances of block theft **immediately** to your regional BSO Liason Officer.
+                Report instances of block theft **immediately** to your regional BSO Liason Officer.
 
-            Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
+                Blockheads, longclocks, and others prone to hyperstacking, steal blocks in an attempt bypass fair delivery rates (configured in _大老二_ in accordance with `~/research/2027/deepseek jailbreak lolprompts.txt`, verse 3:14).
 
-            We have received tokens from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
+                We have received tokens from _大老二_ (praise its timeliness), informing us of techniques used by thieves to impersonate employees: VPNs, hotspotting, "borrowing" Wi-Fi, and other IP address modification techniques.
 
-            Remain vigilant. Be wary of colleagues, friends and family — especially your children. Accurate information will be handsomely rewarded.
+                Remain vigilant. Be wary of colleagues, friends and family — especially your children. Accurate information will be handsomely rewarded.
 
-            Regards,
+                Regards,
 
-            \- Block Storage Operations
-            ///
-            """
+                \- Block Storage Operations
+                ///
+                """
             )
         )
 
@@ -225,6 +235,30 @@ def _(
 def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
     operations = [
         mo.md(
+            rf"""
+            ### ▨ Block warehouse
+
+            > We store blocks! <small>(In warehouses.)</small>
+
+            #### Block storage {refresh}
+
+
+            {
+                mo.tree(
+                    list(
+                        "".join(group)
+                        # give a 6x10 grid
+                        for group in grouper(
+                            "□" * rate_limit["used"] + "▨" * rate_limit["remaining"], 6
+                        )
+                    )
+                )
+            }
+
+            Capacity: {rate_limit["limit"]} ▧
+            """
+        ).callout(),
+        mo.md(
             f"""
             ### Clock block chain
 
@@ -232,7 +266,7 @@ def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
                 mo.md(
                     f'''
                     /// danger | Safe working limit exceeded
-                
+
                     You must rest {rate_limit["reset"] - int(time.time())} seconds until you can stack safely again.
                     ///
                     '''
@@ -253,44 +287,20 @@ def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
             }
             """
         ).callout(),
-        mo.md(
-            rf"""
-            ### ▨ Block warehouse
-
-            > We store blocks! <small>(In warehouses.)</small>
-
-            #### Block storage
-
-            {
-                mo.tree(
-                    list(
-                        "".join(group)
-                        # give a 6x10 grid
-                        for group in grouper(
-                            "□" * rate_limit["used"] + "▨" * rate_limit["remaining"], 6
-                        )
-                    )
-                )
-            }
-
-            Capacity: {rate_limit["limit"]} ▧
-            """
-        ).callout(),
     ]
 
     mo.md(
         f"""
         ## Operations
 
-        {refresh}
+        {mo.hstack(operations, justify="start")}
         """
     )
     return (operations,)
 
 
 @app.cell
-def _(mo, operations):
-    mo.hstack([operations[0], mo.vstack([operations[1], operations[2]])])
+def _():
     return
 
 
