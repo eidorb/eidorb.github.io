@@ -49,8 +49,26 @@ def _(mo):
 
 @app.cell
 def _(github):
-    gh = github.Github()
-    return (gh,)
+    class Game(github.Github):
+        def __init__(self):
+            # raise exceptions instead of retry
+            super().__init__(retry=None)
+
+        def consume_core(self):
+            """Consumes 1 core resource.
+
+            Raises RateLimitExceededException if resource could not be consumed.
+            """
+            self.get_user("eidorb")
+    return (Game,)
+
+
+@app.cell
+def _(Game, mo):
+    game = Game()
+
+    consume_core = mo.ui.run_button(label="Consume `core`")
+    return consume_core, game
 
 
 @app.cell
@@ -66,9 +84,11 @@ def _(mo):
 
 
 @app.cell
-def _(gh, mo):
-    rate_limit = gh.get_rate_limit()
-    rate_limit
+def _(consume_core, game, mo):
+    # refresh
+    consume_core.value
+
+    rate_limit = game.get_rate_limit()
 
     mo.md(
         f"""
@@ -76,7 +96,7 @@ def _(gh, mo):
     
         ## `/rate_limit` endpoint.
 
-        Querying it gives resources statistics.
+        Querying it gives resource rate limit status.
 
         {
             mo.hstack(
@@ -181,22 +201,27 @@ def _(mo, rate_limit):
 
 
 @app.cell
-def _(go, mo, rate_limit):
+def _(consume_core, go, mo, rate_limit):
     mo.hstack(
         [
-            mo.ui.plotly(
-                go.Figure(
-                    go.Indicator(
-                        mode="gauge+number",
-                        gauge={
-                            "axis": {"range": [None, rate_limit.core.limit]},
-                        },
-                        value=rate_limit.core.used,
-                        number={"suffix": "/hour"},
-                        title="core",
+            mo.vstack(
+                [
+                    mo.ui.plotly(
+                        go.Figure(
+                            go.Indicator(
+                                mode="gauge+number",
+                                gauge={
+                                    "axis": {"range": [None, rate_limit.core.limit]},
+                                },
+                                value=rate_limit.core.used,
+                                number={"suffix": "/hour"},
+                                title="core",
+                            ),
+                            layout={"width": 250, "height": 250},
+                        )
                     ),
-                    layout={"width": 250, "height": 250},
-                )
+                    mo.md(f"{consume_core}"),
+                ]
             ),
             mo.ui.plotly(
                 go.Figure(
@@ -232,8 +257,39 @@ def _(go, mo, rate_limit):
                 )
             ),
         ],
-        # justify="start",
     )
+    return
+
+
+@app.cell
+def _(consume_core, game, github, mo):
+    if consume_core.value:
+        # burn a request to /hooks (small response)
+        try:
+            assert game.consume_core()
+        except github.RateLimitExceededException as e:
+            mo.output.append(
+                mo.md(
+                    f"""
+                    /// error | Error
+
+                    `{str(e)}`
+                    /// 
+                    """
+                )
+            )
+    return
+
+
+@app.cell
+def _():
+    import requests
+    return (requests,)
+
+
+@app.cell
+def _(requests):
+    requests.post('https://api.github.com/app-manifests/CODE/conversions').json()
     return
 
 
