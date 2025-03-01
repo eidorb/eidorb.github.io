@@ -53,6 +53,45 @@ def _(mo):
 
 
 @app.cell
+def _(mo, rate_limit):
+    mo.md(
+        f"""
+        ## Employee handbook
+
+        Mined blocks are distributed to warehouses at precisely **1** block **per minute**. 
+
+        We halt deliveries if you have stacked more than 
+        **{rate_limit["limit"]}** blocks in the **past hour**.
+
+        _大老二_ has prescribed limits in alignment with our safety. 
+        Do not attempt to bypass safe working limits.
+
+        Work on your task list with one-pointed strong determination:
+
+        - stack block from warehouse onto blockchain
+
+        #### Block stacking workflow
+
+        {
+            mo.mermaid(
+                '''
+                stateDiagram-v2
+                    s : stack block from warehouse onto blockchain
+                    [*] --> s
+                    s --> s
+                '''
+            )
+        }
+
+        _BLOPS-101_
+
+        {mo.md("<small>EmployeeHandbook - Copy (2)-external.docx</small>").right()}
+        """
+    ).callout().left()
+    return
+
+
+@app.cell
 def _(clockblockchain, login, requests, stack):
     rate_limit = requests.get("https://api.github.com/rate_limit").json()["rate"]
     show_login_notice_threshold = 7
@@ -233,42 +272,8 @@ def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
                     )
                 )
             }
-        
+
             Capacity: {rate_limit["limit"]} ▧
-            """
-        ).callout(),
-        mo.md(
-            f"""
-            ### Employee handbook
-
-            Mined blocks are distributed to warehouses at precisely **1** block **per minute**. 
-
-            We halt deliveries if you have stacked more than 
-            **{rate_limit["limit"]}** blocks in the **past hour**.
-        
-            _大老二_ has prescribed limits in alignment with our safety. 
-            Do not attempt to bypass safe working limits.
-
-            Work on your task list with one-pointed strong determination:
-
-            - stack block from warehouse onto blockchain
-
-            #### Block stacking workflow
-
-            {
-                mo.mermaid(
-                    '''
-                    stateDiagram-v2
-                        s : stack block from warehouse onto blockchain
-                        [*] --> s
-                        s --> s
-                    '''
-                )
-            }
-
-            _BLOPS-101_
-
-            {mo.md("<small>EmployeeHandbook - Copy (2)-external.docx</small>").right()}
             """
         ).callout(),
     ]
@@ -276,7 +281,7 @@ def _(clockblockchain, grouper, mo, rate_limit, refresh, stack, time):
     mo.md(
         f"""
         ## Operations
-    
+
         {refresh}
         """
     )
