@@ -135,24 +135,5 @@ def _(mo):
     return
 
 
-@app.cell
-def _(mo):
-    # hmm perhaps lil switch, towards bottow of page, with lab icon (beaker thing)
-    switch = mo.ui.switch(label="do not disturb")
-
-    # actually, nah...
-    # it's a toggle button
-    # https://docs.marimo.io/recipes/?h=toggle#create-a-toggle-button
-
-    mo.hstack([switch, mo.md(f"Has value: {switch.value}")])
-    mo.ui.tabs(
-        {
-            " ": "bar",
-            "💻 LAB hehe!": mo.ui.text(placeholder="Key"),
-        }
-    )
-    return (switch,)
-
-
 if __name__ == "__main__":
     app.run()
