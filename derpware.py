@@ -93,30 +93,20 @@ def _(consume_core, game, mo):
     mo.md(
         f"""
         GitHub's API provides a
-    
+
         ## `/rate_limit` endpoint.
 
         Querying it gives resource rate limit status.
 
-        {
-            mo.hstack(
-                [
-                    mo.md(
-                        f'''
-                        Raw data:
-                        {mo.tree(rate_limit.raw_data)}
-                '''
-                    ),
-                    mo.md(
-                        f'''
-                        Raw response headers:
-                        {mo.tree(rate_limit.raw_headers)}
-                '''
-                    ),
-                ]
-            )
-        }
+        /// details | Raw data
+    
+        {mo.tree(rate_limit.raw_data)}
+        ///
 
+        /// details | Raw response headers
+                    
+        {mo.tree(rate_limit.raw_headers)}
+        ///
         """
     )
     return (rate_limit,)
@@ -176,8 +166,14 @@ def _(mo, rate_limit):
         # {mo.ui.plotly(round_gauge_fig)}
     mo.md(
         f"""
-        Game has {len(resources)} (unlimited!)
+        Game has two resources. 
+
+        Consumption of resources is governed by a rate limit model.
+
+        Each Game client IP address is limited to the amount of each resource it can consume per hour.
     
+        Game has {len(resources)} (unlimited!)
+
         ## Resources:
 
         Game Resource Model.
@@ -201,6 +197,67 @@ def _(mo, rate_limit):
 
 
 @app.cell
+def _(go, mo, rate_limit):
+    def make_usage(rate):
+        """Returns usage Figure for rate."""
+        return go.Figure(
+            go.Indicator(
+                mode="number+gauge",
+                gauge={
+                    "shape": "bullet",
+                    "axis": {"visible": False, "range": [0, rate.limit]},
+                },
+                value=rate.used,
+                number={"suffix": f"/{rate.limit}"},
+                title="Used",
+            ),
+            # layout={
+            #     "width": 250,
+            #     "height": 210,
+            # },
+        )
+
+
+    mo.md(
+        f"""
+        `core`
+    
+        {mo.as_html(make_usage(rate_limit.core))}
+        """
+    )
+    return (make_usage,)
+
+
+@app.cell
+def _(make_usage, mo, rate_limit):
+    mo.md(
+        f"""
+        `search`
+    
+        {mo.as_html(make_usage(rate_limit.search))}
+        """
+    )
+    return
+
+
+@app.cell
+def _(make_usage, mo, rate_limit):
+    mo.md(
+        f"""
+        `integration_manifest`
+    
+        {mo.as_html(make_usage(rate_limit.integration_manifest))}
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
 def _(consume_core, go, mo, rate_limit):
     mo.hstack(
         [
@@ -211,13 +268,13 @@ def _(consume_core, go, mo, rate_limit):
                             go.Indicator(
                                 mode="gauge+number",
                                 gauge={
-                                    "axis": {"range": [None, rate_limit.core.limit]},
+                                    "axis": {"range": [0, rate_limit.core.limit]},
                                 },
                                 value=rate_limit.core.used,
                                 number={"suffix": "/hour"},
                                 title="core",
                             ),
-                            layout={"width": 250, "height": 250},
+                            # layout={"width": 250, "height": 250},
                         )
                     ),
                     mo.md(f"{consume_core}"),
@@ -288,8 +345,21 @@ def _():
 
 
 @app.cell
+def _(game, requests):
+    requests.post("https://api.github.com/app-manifests/CODE/conversions").json()
+    game.get_rate_limit().integration_manifest
+    return
+
+
+@app.cell
+def _(rate_limit):
+    rate_limit.integration_manifest
+    return
+
+
+@app.cell
 def _(requests):
-    requests.post('https://api.github.com/app-manifests/CODE/conversions').json()
+    requests.get("https://api.github.com/app/installation-requests").json()
     return
 
 
