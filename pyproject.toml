@@ -4,6 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "marimo>=0.11.8",
+    "plotly>=6.0.0",
     "pygithub>=2.6.1",
 ]
 license = "AGPL-3.0-or-later"
