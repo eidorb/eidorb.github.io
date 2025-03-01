@@ -122,7 +122,31 @@ def _(login, mo, requests):
 def _(mo):
     mo.md(
         r"""
-        ## Games
+        ## wot is a game?
+
+        A **game** is like a computer program or system with rules and a state, such as Mario collecting stars or a gunfire rate in a shooter. 
+
+        These rules and states are part of what we call the **game model**, which is the underlying structure defining how the game works. 
+
+        **Gameplay** is the experience of playing, 
+
+        while **gameplay mechanics** are the specific rules, like how fast you can shoot or how energy depletes. 
+
+        The **game resource model** manages things like health or energy, detailing how they're used or replenished.
+
+
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## GitHub's MODGE service
+
+        GitHub runs a multiplayer online distributed game engine (MODGE) service.
 
         >  The game is out there, and it's either play or get played.
         >
@@ -134,6 +158,12 @@ def _(mo):
         _You right mate?_
 
         It's odd for sure, but kinda cool! 
+
+        The "game model" (underlying structure defining how the game works) is GitHub's REST API. It simply exists and we cannot influence how it works.
+
+        You have a rate-limited gameplay mechanic.
+
+        's fixed and I have no control over how it works.
 
         In-game resources 
 
