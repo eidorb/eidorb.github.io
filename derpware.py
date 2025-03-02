@@ -54,21 +54,49 @@ def _(github):
             # raise exceptions instead of retry
             super().__init__(retry=None)
 
-        def consume_core(self):
+        def consume_core(self) -> None:
             """Consumes 1 core resource.
 
-            Raises RateLimitExceededException if resource could not be consumed.
+            Raises RateLimitExceededException if core limit reached.
             """
-            self.get_user("eidorb")
+            # request to /get_hooks returns 404, but counts towards rate limit
+            try:
+                self.get_hooks()
+            except github.UnknownObjectException as e:
+                return e
+
+        def consume_search(self) -> None:
+            """Consumes 1 search resource.
+
+            Raises RateLimitExceededException if search limit reached.
+            """
+            # search request without query returns 422 validation error, but counts towards rate limit
+            try:
+                self.requester.requestJsonAndCheck("GET", "/search/users")
+            except github.GithubException as e:
+                if e._GithubException__status != 422:
+                    raise
+                return e
+
+        def consume_integration_manifest(self) -> None:
+            """Consumes 1 integration_manifest resource.
+
+            Raises RateLimitExceededException if core limit reached.
+            """
+            # request with bullshit code returns 404, but counts towards rate limit
+            try:
+                self.requester.requestJsonAndCheck(
+                    "POST", "/app-manifests/{code}/conversions"
+                )
+            except github.UnknownObjectException as e:
+                return e
     return (Game,)
 
 
 @app.cell
-def _(Game, mo):
+def _(Game):
     game = Game()
-
-    consume_core = mo.ui.run_button(label="Consume `core`")
-    return consume_core, game
+    return (game,)
 
 
 @app.cell
@@ -84,32 +112,49 @@ def _(mo):
 
 
 @app.cell
-def _(consume_core, game, mo):
-    # refresh
-    consume_core.value
+def _(mo):
+    consume_search = mo.ui.run_button(kind="danger", label="Consume")
+    consume_core = mo.ui.run_button(kind="danger", label="Consume")
+    consume_integration_manifest = mo.ui.run_button(kind="danger", label="Consume")
+    return consume_core, consume_integration_manifest, consume_search
+
+
+@app.cell
+def _(consume_core, consume_integration_manifest, consume_search, game):
+    # handle button clicks
+    if consume_search.value:
+        assert game.consume_search()
+    if consume_core.value:
+        assert game.consume_core()
+    if consume_integration_manifest.value:
+        assert game.consume_integration_manifest()
 
     rate_limit = game.get_rate_limit()
+    return (rate_limit,)
 
+
+@app.cell
+def _(mo, rate_limit):
     mo.md(
         f"""
         GitHub's API provides a
 
-        ## `/rate_limit` endpoint.
+        ## /rate_limit/rate_limit endpoint.
 
         Querying it gives resource rate limit status.
 
         /// details | Raw data
-    
+
         {mo.tree(rate_limit.raw_data)}
         ///
 
         /// details | Raw response headers
-                    
+
         {mo.tree(rate_limit.raw_headers)}
         ///
         """
     )
-    return (rate_limit,)
+    return
 
 
 @app.cell
@@ -171,7 +216,7 @@ def _(mo, rate_limit):
         Consumption of resources is governed by a rate limit model.
 
         Each Game client IP address is limited to the amount of each resource it can consume per hour.
-    
+
         Game has {len(resources)} (unlimited!)
 
         ## Resources:
@@ -197,7 +242,7 @@ def _(mo, rate_limit):
 
 
 @app.cell
-def _(go, mo, rate_limit):
+def _(consume_core, go, mo, rate_limit):
     def make_usage(rate):
         """Returns usage Figure for rate."""
         return go.Figure(
@@ -220,8 +265,8 @@ def _(go, mo, rate_limit):
 
     mo.md(
         f"""
-        `core`
-    
+        `core` {consume_core}
+
         {mo.as_html(make_usage(rate_limit.core))}
         """
     )
@@ -229,10 +274,13 @@ def _(go, mo, rate_limit):
 
 
 @app.cell
-def _(make_usage, mo, rate_limit):
+def _(consume_search, game, make_usage, mo, rate_limit):
+    if consume_search.value:
+        assert game.consume_integration_manifest()
+
     mo.md(
         f"""
-        `search`
+        `search` {consume_search}
     
         {mo.as_html(make_usage(rate_limit.search))}
         """
@@ -241,19 +289,14 @@ def _(make_usage, mo, rate_limit):
 
 
 @app.cell
-def _(make_usage, mo, rate_limit):
+def _(consume_integration_manifest, make_usage, mo, rate_limit):
     mo.md(
         f"""
-        `integration_manifest`
-    
+        `integration_manifest` {consume_integration_manifest}
+
         {mo.as_html(make_usage(rate_limit.integration_manifest))}
         """
     )
-    return
-
-
-@app.cell
-def _():
     return
 
 
@@ -315,51 +358,6 @@ def _(consume_core, go, mo, rate_limit):
             ),
         ],
     )
-    return
-
-
-@app.cell
-def _(consume_core, game, github, mo):
-    if consume_core.value:
-        # burn a request to /hooks (small response)
-        try:
-            assert game.consume_core()
-        except github.RateLimitExceededException as e:
-            mo.output.append(
-                mo.md(
-                    f"""
-                    /// error | Error
-
-                    `{str(e)}`
-                    /// 
-                    """
-                )
-            )
-    return
-
-
-@app.cell
-def _():
-    import requests
-    return (requests,)
-
-
-@app.cell
-def _(game, requests):
-    requests.post("https://api.github.com/app-manifests/CODE/conversions").json()
-    game.get_rate_limit().integration_manifest
-    return
-
-
-@app.cell
-def _(rate_limit):
-    rate_limit.integration_manifest
-    return
-
-
-@app.cell
-def _(requests):
-    requests.get("https://api.github.com/app/installation-requests").json()
     return
 
 
