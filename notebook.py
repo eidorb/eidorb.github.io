@@ -122,6 +122,7 @@ def _(login, mo, requests):
 def _(mo):
     mo.md(
         r"""
+        <!-- 
         ## wot is a game?
 
         A **game** is like a computer program or system with rules and a state, such as Mario collecting stars or a gunfire rate in a shooter. 
@@ -133,8 +134,7 @@ def _(mo):
         while **gameplay mechanics** are the specific rules, like how fast you can shoot or how energy depletes. 
 
         The **game resource model** manages things like health or energy, detailing how they're used or replenished.
-
-
+        -->
         """
     )
     return
@@ -144,45 +144,38 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## GitHub's MODGE service
-
-        GitHub runs a multiplayer online distributed game engine (MODGE) service.
+        ## MODGE
 
         >  The game is out there, and it's either play or get played.
         >
-        > -- Omar Little
+        > —Omar Little
 
-        These games are played by billions of simultaneous players.
+        GitHub runs a multiplayer online distributed game engine service — _MODGE_.
+
+        Games are played by billions of simultaneous games globally.
         Not all players realise they are playing.
-
-        _You right mate?_
 
         It's odd for sure, but kinda cool! 
 
-        The "game model" (underlying structure defining how the game works) is GitHub's REST API. It simply exists and we cannot influence how it works.
-
-        You have a rate-limited gameplay mechanic.
-
-        's fixed and I have no control over how it works.
-
-        In-game resources 
-
-        Game state is modelled with the API rate limit model. 
-
-        umanage sing GitHub. 
-        in-game player actions correspond
-        player actions correspond to API requests,
-        in-game resource is modelled with
-
         >  A man got to have a code.
         >
-        > -- Omar Little
+        > —Omar Little
 
+        The "game model" (underlying structure defining how the game works) is GitHub's REST API. 
+        _How_ it works cannot be influenced.
+        It simply exists.
+        But you can _use_ it.
 
-        So, if the game is using the API request rate limit model to manage gameplay, that might mean that the game's mechanics are designed such that  and the rate at which these requests can be made affects how the player can interact with the game.
+        API use is subject to rate limits.
+        This can be used as a rate-limited game resource model.
+        Various gameplay mechanics can be built upon this: energy level, stars, action cool down, etc.
 
         Game ideas are limited by imagination.
 
+        ### Games
+
+
+        - [Deadman](https://eidorb.github.io/deadman.html)
         - [Blockwork](https://eidorb.github.io/blockwork.html)
         """
     )
