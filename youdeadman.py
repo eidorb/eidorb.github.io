@@ -25,6 +25,8 @@ def _():
 
 @app.cell
 def _():
+    import time
+
     import github  # game model based on PyGithub
     from plotly import graph_objects as go
 
@@ -75,40 +77,46 @@ def _():
     class DeadManGame(Game):
         def __init__(self):
             super().__init__()
+            self.refresh()
+            self.ammo_prev = 0
+
+        def refresh(self):
             rate_limit = self.get_rate_limit()
             self.clip_size = rate_limit.core.limit
-
             self.health = rate_limit.search.remaining / rate_limit.search.limit
-            self.ammo = self.ammo_prev = rate_limit.core.remaining
+            self.ammo = rate_limit.core.remaining
+            self.time_until_alive = int(rate_limit.search.reset.timestamp() - time.time())
 
-        def bomb(self):
+        def attack(self):
             try:
                 self.consume_core()  # ammo -> search resource
                 self.consume_search()  # health -> core resource
             except github.RateLimitExceededException:
                 pass  # no more ammo/health
-            rate_limit = self.get_rate_limit()
-            self.health = rate_limit.search.remaining / rate_limit.search.limit
+            self.refresh()
             self.ammo_prev = self.ammo
-            self.ammo = rate_limit.core.remaining
 
 
     game = DeadManGame()
-    return DeadManGame, Game, game, github, go
+    return DeadManGame, Game, game, github, go, time
 
 
 @app.cell
 def _(mo):
     # ui buttons
-    bomb = mo.ui.run_button(kind="danger", label="Bomb 💥")
-    return (bomb,)
+    attack = mo.ui.run_button(kind="danger", label="Attack! 💥")
+    refresh = mo.ui.refresh()
+    return attack, refresh
 
 
 @app.cell
-def _(bomb, faces_urls, game, go, mo):
+def _(attack, faces_urls, game, go, mo, refresh):
     # handle button clicks
-    if bomb.value:
-        game.bomb()
+    if attack.value:
+        game.attack()
+
+    if refresh.value:
+        game.refresh()
 
     # selct face based on health
     face_url = faces_urls[int(game.health * (len(faces_urls) - 1) + 0.5)]
@@ -132,25 +140,49 @@ def _(bomb, faces_urls, game, go, mo):
 
     mo.vstack(
         [
-            mo.md("# You alive man!")
-            if game.health
-            else mo.md(
-                f"""
-                # You adead man!
-                """
-            ),
+            mo.md("# You alive man." if game.health else "# You adead man!"),
             mo.image(
                 face_url,
                 width="20em",
                 rounded=True,
                 style={"image-rendering": "pixelated"},
-                caption=f"You.<br><small>Status: alive</small>",
+                caption=f"You.<br><small>Status: {'alive.' if game.health else 'adead.'}</small>",
             ),
+            mo.md(
+                f"""
+                /// warning | You cannot play
+
+                Reason:
+
+                > You adead man. We only let alive man play.
+
+                {refresh} Please wait {game.time_until_alive} seconds to be alive man.
+                ///
+                """
+            )
+            if not game.health
+            else "",
             mo.hstack(
-                [mo.as_html(fig).center(), bomb.center()],
+                [mo.as_html(fig), attack],
                 # justify="space-around",
                 align="center",
             ),
+            mo.md(
+                f"""
+                /// warning | You cannot attack
+
+                Reason:
+
+                > You have no ammo man.
+                ///
+
+                (But you can find more ammo using a different IP address. 
+                Because that's how ammo works in this game. 
+                It's _IP address ammo_.)
+                """
+            )
+            if not game.ammo
+            else "",
         ],
         align="center",
     )
