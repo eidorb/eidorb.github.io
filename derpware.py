@@ -71,7 +71,7 @@ def _():
                 self.requester.requestJsonAndCheck("GET", "/search/users")
             except github.GithubException as e:
                 if e._GithubException__status != 422:
-                    raise
+                    raise  # raise all other errors e.g. ratelimitexceeded
                 return e
 
         def consume_integration_manifest(self) -> None:
@@ -120,17 +120,20 @@ def _(mo, rate_limit):
 
 
 @app.cell
-def _(Game, mo):
-    game = Game()
-
+def _(mo):
+    # ui buttons
     consume_search = mo.ui.run_button(kind="danger", label="Consume")
     consume_core = mo.ui.run_button(kind="danger", label="Consume")
     consume_integration_manifest = mo.ui.run_button(kind="danger", label="Consume")
-    return consume_core, consume_integration_manifest, consume_search, game
+    return consume_core, consume_integration_manifest, consume_search
 
 
 @app.cell
-def _(consume_core, consume_integration_manifest, consume_search, game):
+def _(Game, consume_core, consume_integration_manifest, consume_search):
+    game = Game()
+
+    rate_limit = game.get_rate_limit()
+
     # handle button clicks
     if consume_search.value:
         assert game.consume_search()
@@ -138,9 +141,82 @@ def _(consume_core, consume_integration_manifest, consume_search, game):
         assert game.consume_core()
     if consume_integration_manifest.value:
         assert game.consume_integration_manifest()
+    return game, rate_limit
 
-    rate_limit = game.get_rate_limit()
-    return (rate_limit,)
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        Game has three
+
+        ## Resources:
+        """
+    )
+    return
+
+
+@app.cell
+def _(
+    consume_core,
+    consume_integration_manifest,
+    consume_search,
+    go,
+    mo,
+    rate_limit,
+):
+    def make_figure(rate):
+        """Returns visualisation of rate."""
+        return go.Figure(
+            go.Indicator(
+                mode="number+gauge",
+                gauge={
+                    "shape": "bullet",
+                    "axis": {"visible": False, "range": [0, rate.limit]},
+                },
+                value=rate.remaining,
+                # domain={'x': [0, 0.5]},
+                # number={"suffix": f"/{rate.limit}"},
+                # title="Remaining",
+                title="<span style='font-size:0.6em;color:gray'>Remaining</span>",
+            ),
+            layout=dict(height=200, width=250),
+            # layout=dict(width=250)
+        )
+
+
+    mo.hstack(
+        [
+            mo.md(
+                f"""
+                ### `search`
+
+                {mo.as_html(make_figure(rate_limit.search))}
+        
+                {consume_search}
+                """
+            ),
+            mo.md(
+                f"""
+                ### `core`
+        
+                {mo.as_html(make_figure(rate_limit.core))}
+
+                {consume_core}
+                """
+            ),
+            mo.md(
+                f"""
+                ### `integration_manifest`
+        
+                {mo.as_html(make_figure(rate_limit.integration_manifest))}
+            
+                {consume_integration_manifest}
+                """
+            ),
+        ]
+    )
+    return (make_figure,)
 
 
 @app.cell
@@ -228,66 +304,7 @@ def _(mo, rate_limit):
 
 
 @app.cell
-def _(consume_core, go, mo, rate_limit):
-    def make_usage(rate):
-        """Returns usage Figure for rate."""
-        return go.Figure(
-            go.Indicator(
-                mode="number+gauge",
-                gauge={
-                    "shape": "bullet",
-                    "axis": {"visible": False, "range": [0, rate.limit]},
-                },
-                value=rate.used,
-                number={"suffix": f"/{rate.limit}"},
-                title="Used",
-            ),
-            # layout={
-            #     "width": 250,
-            #     "height": 210,
-            # },
-        )
-
-
-    mo.md(
-        f"""
-        `core` {consume_core}
-
-        {mo.as_html(make_usage(rate_limit.core))}
-        """
-    )
-    return (make_usage,)
-
-
-@app.cell
-def _(consume_search, game, make_usage, mo, rate_limit):
-    if consume_search.value:
-        assert game.consume_integration_manifest()
-
-    mo.md(
-        f"""
-        `search` {consume_search}
-    
-        {mo.as_html(make_usage(rate_limit.search))}
-        """
-    )
-    return
-
-
-@app.cell
-def _(consume_integration_manifest, make_usage, mo, rate_limit):
-    mo.md(
-        f"""
-        `integration_manifest` {consume_integration_manifest}
-
-        {mo.as_html(make_usage(rate_limit.integration_manifest))}
-        """
-    )
-    return
-
-
-@app.cell
-def _(consume_core, go, mo, rate_limit):
+def _(go, mo, rate_limit):
     mo.hstack(
         [
             mo.vstack(
@@ -306,7 +323,6 @@ def _(consume_core, go, mo, rate_limit):
                             # layout={"width": 250, "height": 250},
                         )
                     ),
-                    mo.md(f"{consume_core}"),
                 ]
             ),
             mo.ui.plotly(
