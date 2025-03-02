@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.11.8"
-app = marimo.App(width="full", app_title="Derpware")
+app = marimo.App(width="full", app_title="Deadman")
 
 
 @app.cell(hide_code=True)
@@ -152,9 +152,7 @@ def _(attack, faces_urls, game, go, mo, refresh):
                 f"""
                 /// warning | You cannot play
 
-                Reason:
-
-                > You adead man. We only let alive man play.
+                You adead man. Only alive man play.
 
                 {refresh} Please wait {game.time_until_alive} seconds to be alive man.
                 ///
@@ -171,14 +169,14 @@ def _(attack, faces_urls, game, go, mo, refresh):
                 f"""
                 /// warning | You cannot attack
 
-                Reason:
+                You have no ammo man.
 
-                > You have no ammo man.
-                ///
-
-                (But you can find more ammo using a different IP address. 
-                Because that's how ammo works in this game. 
+                <small>
+                (But you can find more ammo using a different IP address.
+                Because that's how ammo works in this game.
                 It's _IP address ammo_.)
+                </small>
+                ///
                 """
             )
             if not game.ammo
