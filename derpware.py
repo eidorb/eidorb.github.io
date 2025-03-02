@@ -4,29 +4,20 @@ __generated_with = "0.11.8"
 app = marimo.App(width="full", app_title="Derpware")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
-    import github  # just use PyGithub, it's easy, modify later if required
     import marimo as mo
-    return github, mo
+    return (mo,)
 
 
 @app.cell
 def _(mo):
     mo.md(
         """
-        Welcome to 
+        We are 
 
         # Derpware.
-        """
-    )
-    return
 
-
-@app.cell
-def _(mo):
-    mo.md(
-        """
         We make 
 
         ## Game.
@@ -39,16 +30,21 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ### Game Model 
+        Game has a
 
-        is the underlying data structure and logic representing the Game's state and rules. It's the abstraction developers use to define how Game operates, like a chess game's board state and move rules.
+        ## Game Model.
+
+        It's the underlying data structure and logic representing the Game's state and rules. It's the abstraction developers use to define how Game operates, like a chess game's board state and move rules.
         """
     )
     return
 
 
 @app.cell
-def _(github):
+def _():
+    import github  # game model based on PyGithub
+
+
     class Game(github.Github):
         def __init__(self):
             # raise exceptions instead of retry
@@ -90,33 +86,47 @@ def _(github):
                 )
             except github.UnknownObjectException as e:
                 return e
-    return (Game,)
+    return Game, github
 
 
 @app.cell
-def _(Game):
-    game = Game()
-    return (game,)
-
-
-@app.cell
-def _(mo):
+def _(mo, rate_limit):
     mo.md(
-        r"""
-        # Game Resource Model 
+        f"""
+        Game has
 
-        focuses on managing in-game resources, such as health, mana, currency, or ammunition. This model details how resources are acquired, used, and depleted, crucial for gameplay balance and progression.
+        ## Resource Models.
+
+        A resource model manages in-game resources, such as health, mana, currency, or ammunition. It details how resources are acquired, used, and depleted, crucial for gameplay balance and progression.
+
+        Game's resource models _are_ [GitHub's REST API rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28).
+    
+        Calling the rate limit endpoint gives current rate limit status:
+
+        /// details | `GET /rate_limit`
+
+        {
+            mo.hstack(
+                [
+                    mo.md(f"Response: {mo.tree(rate_limit.raw_data)}"),
+                    mo.md(f"Headers: {mo.tree(rate_limit.raw_headers)}"),
+                ]
+            )
+        }
+        ///
         """
     )
     return
 
 
 @app.cell
-def _(mo):
+def _(Game, mo):
+    game = Game()
+
     consume_search = mo.ui.run_button(kind="danger", label="Consume")
     consume_core = mo.ui.run_button(kind="danger", label="Consume")
     consume_integration_manifest = mo.ui.run_button(kind="danger", label="Consume")
-    return consume_core, consume_integration_manifest, consume_search
+    return consume_core, consume_integration_manifest, consume_search, game
 
 
 @app.cell
@@ -131,30 +141,6 @@ def _(consume_core, consume_integration_manifest, consume_search, game):
 
     rate_limit = game.get_rate_limit()
     return (rate_limit,)
-
-
-@app.cell
-def _(mo, rate_limit):
-    mo.md(
-        f"""
-        GitHub's API provides a
-
-        ## /rate_limit/rate_limit endpoint.
-
-        Querying it gives resource rate limit status.
-
-        /// details | Raw data
-
-        {mo.tree(rate_limit.raw_data)}
-        ///
-
-        /// details | Raw response headers
-
-        {mo.tree(rate_limit.raw_headers)}
-        ///
-        """
-    )
-    return
 
 
 @app.cell
