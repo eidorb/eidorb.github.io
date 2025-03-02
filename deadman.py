@@ -5,8 +5,14 @@ app = marimo.App(width="full", app_title="Deadman")
 
 
 @app.cell(hide_code=True)
-def _():
+async def _():
     import marimo as mo
+
+    with mo.status.spinner(subtitle="loading snakes on a browser..."):
+        import micropip
+
+        # await micropip.install(["requests", "PyGithub", "ssl"])  # for le web
+        await micropip.install(["ssl"])  # for le web
 
     # different health levels have different faces
     faces_urls = [
@@ -20,7 +26,7 @@ def _():
         "data:image/bmp;base64,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",
     ]
     faces_urls.reverse()
-    return faces_urls, mo
+    return faces_urls, micropip, mo
 
 
 @app.cell
@@ -28,7 +34,6 @@ def _():
     import time
 
     import github  # game model based on PyGithub
-    from plotly import graph_objects as go
 
 
     class Game(github.Github):
@@ -93,12 +98,12 @@ def _():
                 self.consume_search()  # health -> core resource
             except github.RateLimitExceededException:
                 pass  # no more ammo/health
-            self.refresh()
             self.ammo_prev = self.ammo
+            self.refresh()
 
 
     game = DeadManGame()
-    return DeadManGame, Game, game, github, go, time
+    return DeadManGame, Game, game, github, time
 
 
 @app.cell
@@ -110,7 +115,7 @@ def _(mo):
 
 
 @app.cell
-def _(attack, faces_urls, game, go, mo, refresh):
+def _(attack, faces_urls, game, mo, refresh):
     # handle button clicks
     if attack.value:
         game.attack()
@@ -120,23 +125,6 @@ def _(attack, faces_urls, game, go, mo, refresh):
 
     # selct face based on health
     face_url = faces_urls[int(game.health * (len(faces_urls) - 1) + 0.5)]
-
-    fig = go.Figure(
-        go.Indicator(
-            mode="number+gauge+delta",
-            gauge={
-                "shape": "bullet",
-                "axis": {
-                    "visible": False,
-                    "range": [0, game.clip_size],
-                },
-            },
-            value=game.ammo,
-            delta={"reference": game.ammo_prev},
-            number={"suffix": "💣"},
-        ),
-        layout=dict(height=220, width=400),
-    )
 
     mo.vstack(
         [
@@ -160,11 +148,8 @@ def _(attack, faces_urls, game, go, mo, refresh):
             )
             if not game.health
             else "",
-            mo.hstack(
-                [mo.as_html(fig), attack],
-                # justify="space-around",
-                align="center",
-            ),
+            attack,
+            mo.md("💣 " * game.ammo),
             mo.md(
                 f"""
                 /// warning | You cannot attack
@@ -181,10 +166,31 @@ def _(attack, faces_urls, game, go, mo, refresh):
             )
             if not game.ammo
             else "",
+            mo.md(
+                """
+                ## Powered by _MODGE_
+
+                [MODGE](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28)
+                is GitHub's mutiplayer online distributed game engine service.
+
+                MODGE is used to associate resource state (amount of health and ammo) with player IP address.
+                Game state is consistent across devices on the same network.
+                Toggling to a cellular network taps into a separate set of resources, for example.
+
+                _Attack!_ modifies state using MODGE's API:
+
+                - 1 search API request (-1 health) 
+                - 1 core API request (-1 ammo)
+
+                If you adead in the game, you adead in real life (can't search GitHub).
+                [Try it](https://github.com/search?q=can+i+search%3F).
+                (Make sure you're signed out.)
+                """
+            ),
         ],
         align="center",
     )
-    return face_url, fig
+    return (face_url,)
 
 
 if __name__ == "__main__":
